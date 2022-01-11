@@ -12,15 +12,11 @@
       <label for="description" class="form-label">Description</label>
       <textarea class="form-control" id="description" rows="3" minlength="20" maxlength="300" v-model="description" required></textarea>
     </div>
-    <div class="col-12">
-      <label for="formFile" class="form-label">Uploader votre image (jpg/jpeg/png/gif)</label>
-      <input class="form-control" type="file" id="formFile" accept=".gif,.jpg,.jpeg,.png" @change="onFileChange($event)" required>
-    </div>
-    <div id="preview">
-      <img v-if="urlPreview" :src="urlPreview" />
+    <div id="preview"  class="col-12">
+      <img :src="publication.image" />
     </div>
     <div class="col-12">
-      <button class="btn btn-primary" type="submit">Publier</button>
+      <button class="btn btn-primary" type="submit">Mettre à jour</button>
     </div>
   </form>
 </div>
@@ -28,23 +24,19 @@
 <script>
 // import axios from "axios";
 export default {
-  name: "AddFormPublication",
-  props: [],
+  name: "EditFormPublication",
+  props: ["publication"],
   data() {
     return {
-      urlPreview: null,
       title: "",
       description: "",
-      file: null,
     };
   },
+  mounted() {
+    this.title = this.publication.title;
+    this.description = this.publication.description;
+  },
   methods: {
-    onFileChange(e) {
-      if (e.target.files[0]) {
-        this.file = e.target.files[0];
-        this.urlPreview = URL.createObjectURL(this.file);
-      }
-    },
     sendForm() {
       // console.log(this.title, this.description, this.file);
 
@@ -52,24 +44,9 @@ export default {
 
       formData.append("title", this.title);
       formData.append("description", this.description);
-      formData.append("file", this.file);
       formData.forEach((e) => {
         console.log(e);
       });
-      /*
-      axios
-        .post("/single-file", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(function () {
-          console.log("SUCCESS!!");
-        })
-        .catch(function () {
-          console.log("FAILURE!!");
-        });
-        */
     },
   },
 };

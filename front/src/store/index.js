@@ -5,7 +5,8 @@ export default createStore({
   state: {
     token: '',
     profile: null,
-    publications: []
+    publications: [],
+    currentPublication: null
   },
   mutations: {
     setToken(state, token) {
@@ -16,6 +17,9 @@ export default createStore({
     },
     setPublications(state, publications) {
       state.publications = publications;
+    },
+    setCurrentPublication(state, publication) {
+      state.currentPublication = publication;
     },
     updatePublication(state, publication) {
       const index = state.publications.findIndex(p => p.id == publication.id);
@@ -30,6 +34,11 @@ export default createStore({
     getPublications(context) {
       const p = publicationsService.getAll();
       context.commit('setPublications', p);
+    },
+    getPublicationById(context, id) {
+      const p = publicationsService.findOne(id);
+      console.log(p);
+      context.commit('setCurrentPublication', p);
     }
   },
   modules: {

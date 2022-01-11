@@ -1,6 +1,8 @@
 const publications = [
     {
         id: "1",
+        title: "Titre 1",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         date: 'Wed Jan 05 2022 01:56:08 GMT+0100',
         author: "rekik.meriem@gmail.com",
         image: "https://img-9gag-fun.9cache.com/photo/aRrj54j_460swp.webp",
@@ -10,6 +12,8 @@ const publications = [
     },
     {
         id: "2",
+        title: "Titre 1",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         date: 'Wed Jan 05 2022 01:06:08 GMT+0100',
         author: "rekik.yasmine@gmail.com",
         image: "https://img-9gag-fun.9cache.com/photo/a91AQQ1_460swp.webp",
@@ -19,6 +23,8 @@ const publications = [
     },
     {
         id: "3",
+        title: "Titre 1",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         date: 'Wed Jan 05 2022 00:06:08 GMT+0100',
         author: "rekik.meriem@gmail.com",
         image: "https://img-9gag-fun.9cache.com/photo/aVx3jjn_460swp.webp",

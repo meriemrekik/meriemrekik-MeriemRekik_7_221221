@@ -12,18 +12,14 @@
         "
       >
         <div class="col-12">
-          <router-link :to="'../'" exact>
+          <router-link :to="'/'" exact>
             <a class="btn btn-primary btn-sm" href="#" role="button"
               >Retour page accueil</a
             >
           </router-link>
         </div>
         <div class="col-12">
-          <Publication :publication="publication" />
-          <CommentPublication
-            :idPublication="idPublication"
-            :comments="comments"
-          />
+          <EditFormPublication :publication="publication" />
         </div>
       </div>
     </div>
@@ -32,50 +28,26 @@
 
 <script>
 // @ is an alias to /src
-import Publication from "@/components/publications/Publication.vue";
+import EditFormPublication from "@/components/publications/EditFormPublication.vue";
 const publicationServ = require("../services/publication");
-import CommentPublication from "@/components/publications/CommentPublication.vue";
 export default {
-  name: "Detail",
+  name: "EditPublication",
   data() {
     return {
       idPublication: null,
       publication: {},
-      comments: [],
     };
   },
   mounted() {
     this.idPublication = this.$route.params.id || null;
-    // this.publication = this.$store.state.currentPublication;
-    // this.$store.dispatch("getPublicationById", this.idPublication);
-    this.getComment();
     this.getPublication(this.idPublication);
   },
   components: {
-    Publication,
-    CommentPublication,
+    EditFormPublication,
   },
   methods: {
     getPublication(id) {
       this.publication = publicationServ.findOne(id);
-    },
-    getComment() {
-      this.comments = [
-        {
-          id: "1",
-          idPublication: "",
-          date: "",
-          author: "rekik.meriem@gmail.com",
-          text: "Image qui m'a beaucoup amusé !!!",
-        },
-        {
-          id: "2",
-          idPublication: "",
-          date: "",
-          author: "teste@gmail.com",
-          text: "Image !!!",
-        },
-      ];
     },
   },
 };
