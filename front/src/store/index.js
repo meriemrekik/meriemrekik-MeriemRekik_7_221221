@@ -1,9 +1,9 @@
 import { createStore } from 'vuex'
-const publicationsService = require('../services/publication');
+import publicationsService from "../services/publication";
 
 export default createStore({
   state: {
-    token: '',
+    token: null,
     profile: null,
     publications: [],
     currentPublication: null
@@ -32,13 +32,14 @@ export default createStore({
   },
   actions: {
     getPublications(context) {
-      const p = publicationsService.getAll();
-      context.commit('setPublications', p);
+      publicationsService.getAll(this.state.token).then((p) => {
+        context.commit('setPublications', p);
+      });
     },
     getPublicationById(context, id) {
-      const p = publicationsService.findOne(id);
-      console.log(p);
-      context.commit('setCurrentPublication', p);
+      publicationsService.findOne(this.state.token, id).then((p) => {
+        context.commit('setCurrentPublication', p);
+      });
     }
   },
   modules: {

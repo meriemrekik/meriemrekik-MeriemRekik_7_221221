@@ -104,6 +104,10 @@
 
               <div class="col-md-6 offset-md-4">
                 <button type="submit" class="btn btn-primary">Valider</button>
+                <div v-if="isSignUpError">
+                  Une erreure est intervenue et vous n'avez pas pu être inscrit
+                  sur le site.
+                </div>
               </div>
             </form>
           </div>
@@ -129,25 +133,34 @@ export default {
       isNomError: false,
       prenom: "",
       isPrenomError: false,
+      isSignUpError: false,
     };
   },
   methods: {
     signUp: function () {
       if (this.validateForm()) {
-        auth.signUp(this.email, this.password, this.nom, this.prenom);
-        console.log("register");
+        auth
+          .signUp(this.email, this.password, this.nom, this.prenom)
+          .then((response) => {
+            const token = response.token;
+            // on garde le token dans le store
+            this.$store.commit("setToken", token);
+            // on recupère le profile de l'utilisateur
+            const profile = response.profile;
+            // on met le profile dans le store
+
+            this.$store.commit("setProfile", profile);
+            // on lance une action pour récupèrer toutes les publications
+            // this.$store.dispatch("getPublications");
+
+            this.isSignUpError = false;
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            console.log(error);
+            this.isSignUpError = true;
+          });
       }
-      // Simple POST request with a JSON body using fetch
-      /*
-                const requestOptions = {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ title: "Vue POST Request Example" })
-                };
-                fetch("https://jsonplaceholder.typicode.com/posts", requestOptions)
-                    .then(response => response.json())
-                    .then(data => (this.postId = data.id));
-            */
     },
     validateForm: function () {
       if (form.validateEmail(this.email)) {

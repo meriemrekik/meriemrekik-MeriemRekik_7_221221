@@ -3,19 +3,17 @@
     <div class="card-header">
       <h5 class="card-title">{{ publication.title }}</h5>
     </div>
-    <img v-bind:src="publication.image" class="card-img-top" alt="...">
+    <img v-bind:src="publication.imageUrl" class="card-img-top" alt="...">
     <div class="card-body">
-      <div v-if="publication?.author == currentProfile?.email" class="">
+      <div v-if="publication?.userId == currentProfile?.id" class="">
         <router-link :to="'/publication/'+publication.id+'/edit'" exact>
           <a class="btn btn-primary btn-sm" href="#" role="button"
               >Editer</a
             >
         </router-link>
-        <router-link :to="'/publication/'+publication.id+'/delete'" exact>
-        <a class="btn btn-danger btn-sm" href="#" role="button"
+        <a class="btn btn-danger btn-sm" href="#" role="button"  data-bs-toggle="modal" :data-bs-target="'#publication'+publication.id"
           >Supprimer
           </a>
-        </router-link>
       </div>
       <div class="card-text">
         <p>{{ publication.description }}</p>
@@ -33,30 +31,25 @@
         </button>
       </p>
       <p class="card-text">
-        <small class="text-muted">Publié par {{ publication.author }} le {{ publication.date }}</small>
+        <small class="text-muted">Publié par {{ publication.author }} {{ formatDate.displayDateAndHour(publication.createdAt) }}</small>
       </p>
     </div>
   </div>
 
-  <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#publication'+publication.id">
-  Launch demo modal
-</button>
-
 <!-- Modal -->
-<div class="modal fade" :id="'publication'+publication.id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" :id="'publication'+publication.id" tabindex="-1" aria-labelledby="publicationDeleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="publicationDeleteModalLabel">Supprimer Publication</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        Etes-vous sure de vouloir supprimer votre publication : {{ publication.title }} ? Tous les commentaires et likes associés à cette publication seront perdu.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" v-on:click="deletePublication">Oui je supprimer</button>
       </div>
     </div>
   </div>
@@ -65,6 +58,7 @@
 </template>
 <script>
 // import { onMounted } from "vue";
+const formatDate = require("../../helper/formatDate");
 const publicationServ = require("../../services/publication");
 
 export default {
@@ -75,10 +69,15 @@ export default {
       currentProfile: null,
       isCurrentUserLike: false,
       isCurrentUserDislike: false,
+      formatDate,
     };
   },
   mounted() {
     this.init();
+  },
+  // emits: ["publicationDeleted"],
+  emits: {
+    publicationDeleted: null,
   },
   methods: {
     init() {
@@ -120,6 +119,13 @@ export default {
             this.currentProfile.id,
             "-1"
           );
+    },
+    deletePublication() {
+      console.log(
+        `Axios lance le delete de la publication avec l'id ${this.publication.id}`
+      );
+      this.$emit("publicationDeleted", this.publication.id);
+      this.$router.push("/");
     },
   },
 };

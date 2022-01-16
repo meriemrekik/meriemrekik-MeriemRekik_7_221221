@@ -27,6 +27,8 @@
 </template>
 <script>
 // import axios from "axios";
+import publicationService from "../../services/publication";
+
 export default {
   name: "AddFormPublication",
   props: [],
@@ -36,7 +38,11 @@ export default {
       title: "",
       description: "",
       file: null,
+      token: null,
     };
+  },
+  mounted() {
+    this.token = this.$store.state.token;
   },
   methods: {
     onFileChange(e) {
@@ -46,30 +52,21 @@ export default {
       }
     },
     sendForm() {
-      // console.log(this.title, this.description, this.file);
-
       let formData = new FormData();
-
-      formData.append("title", this.title);
-      formData.append("description", this.description);
-      formData.append("file", this.file);
-      formData.forEach((e) => {
-        console.log(e);
-      });
-      /*
-      axios
-        .post("/single-file", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      const publication = {
+        title: this.title,
+        description: this.description,
+      };
+      formData.append("publication", JSON.stringify(publication));
+      formData.append("image", this.file);
+      publicationService
+        .create(this.token, formData)
+        .then(() => {
+          this.$router.push("/");
         })
-        .then(function () {
-          console.log("SUCCESS!!");
-        })
-        .catch(function () {
-          console.log("FAILURE!!");
+        .catch((error) => {
+          console.warn(error);
         });
-        */
     },
   },
 };

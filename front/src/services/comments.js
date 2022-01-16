@@ -1,10 +1,24 @@
 const comments = [
     {
         id: "1",
-        idPublication: '',
-        date: '',
+        idPublication: "",
+        date: "Wed Jan 12 2022 21:44:38 GMT+0100 (heure normale d’Europe centrale)",
         author: "rekik.meriem@gmail.com",
         text: "Image qui m'a beaucoup amusé !!!",
+    },
+    {
+        id: "2",
+        idPublication: "",
+        date: "Wed Jan 12 2022 21:44:38 GMT+0100 (heure normale d’Europe centrale)",
+        author: "teste@gmail.com",
+        text: "Très amusant !!!",
+    },
+    {
+        id: "3",
+        idPublication: "",
+        date: "Wed Jan 12 2022 21:44:38 GMT+0100 (heure normale d’Europe centrale)",
+        author: "rekik.meriem@gmail.com",
+        text: "Oui c'est pour ca que je vous l'ai partagé !!!",
     },
 ];
 
@@ -14,7 +28,7 @@ const comments = [
  * @return {?Object}
  */
 function findOne(id) {
-    return comments.find(p => p.id === id) || null;
+    return comments.find(p => parseInt(p.id) === id) || null;
 }
 
 function getAll() {
@@ -40,4 +54,4 @@ function deleteOne(id) {
     return true;
 }
 
-export { findOne, getAll, create, update, deleteOne };
+export default { findOne, getAll, create, update, deleteOne };

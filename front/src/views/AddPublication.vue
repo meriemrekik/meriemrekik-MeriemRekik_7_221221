@@ -4,7 +4,6 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
 import Menu from "@/components/Menu.vue";
 import AddFormPublication from "@/components/publications/AddFormPublication.vue";
 
@@ -13,16 +12,15 @@ import AddFormPublication from "@/components/publications/AddFormPublication.vue
 
 export default {
   name: "AddPublication",
-  setup() {
-    onMounted(() => {
-      // publication.getAll();
-    });
-  },
+  // mounted() {
+  // this.mamethode2();
+  //},
   data() {
     return {
       liensMenu: [
         { url: "/", text: "Accueil" },
         { url: "addPublication", text: "Ajouter une publication" },
+        { url: "profile", text: "Profile" },
         { url: "signIn", text: "Déconnexion" },
       ],
     };
@@ -30,6 +28,14 @@ export default {
   components: {
     Menu,
     AddFormPublication,
+  },
+  methods: {
+    /*  mamethode(){
+      console.log(etest)
+    },
+    mamethode2(){
+      console.log(etest)
+    }*/
   },
 };
 </script>

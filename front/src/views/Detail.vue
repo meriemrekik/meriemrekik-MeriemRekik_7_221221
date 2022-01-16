@@ -19,7 +19,9 @@
           </router-link>
         </div>
         <div class="col-12">
-          <Publication :publication="publication" />
+          <Publication v-if="publication" :publication="publication" />
+        </div>
+        <div class="col-12">
           <CommentPublication
             :idPublication="idPublication"
             :comments="comments"
@@ -33,21 +35,24 @@
 <script>
 // @ is an alias to /src
 import Publication from "@/components/publications/Publication.vue";
-const publicationServ = require("../services/publication");
 import CommentPublication from "@/components/publications/CommentPublication.vue";
+
+import publicationServ from "../services/publication";
+import commentServ from "../services/comments";
+
 export default {
   name: "Detail",
   data() {
     return {
       idPublication: null,
-      publication: {},
+      publication: null,
       comments: [],
+      token: null,
     };
   },
   mounted() {
+    this.token = this.$store.state.token;
     this.idPublication = this.$route.params.id || null;
-    // this.publication = this.$store.state.currentPublication;
-    // this.$store.dispatch("getPublicationById", this.idPublication);
     this.getComment();
     this.getPublication(this.idPublication);
   },
@@ -57,25 +62,13 @@ export default {
   },
   methods: {
     getPublication(id) {
-      this.publication = publicationServ.findOne(id);
+      publicationServ.findOne(this.token, id).then((p) => {
+        this.publication = p;
+        console.log(this.publication);
+      });
     },
     getComment() {
-      this.comments = [
-        {
-          id: "1",
-          idPublication: "",
-          date: "",
-          author: "rekik.meriem@gmail.com",
-          text: "Image qui m'a beaucoup amusé !!!",
-        },
-        {
-          id: "2",
-          idPublication: "",
-          date: "",
-          author: "teste@gmail.com",
-          text: "Image !!!",
-        },
-      ];
+      commentServ.getAll(this.token);
     },
   },
 };

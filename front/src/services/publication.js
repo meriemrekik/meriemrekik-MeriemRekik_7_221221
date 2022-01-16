@@ -1,3 +1,6 @@
+import axios from "axios";
+import config from "../config";
+
 const publications = [
     {
         id: "1",
@@ -39,17 +42,19 @@ const publications = [
  *
  * @return {?Object}
  */
-function findOne(id) {
-    return publications.find(p => p.id === id) || null;
+function findOne(token, id) {
+    const headers = { Authorization: `Bearer ${token}` };
+    return axios.get(`${config.API_URL}/publication/${id}`, { headers }).then((data) => data.data);
 }
 
-function getAll() {
-    return publications;
+function getAll(token) {
+    const headers = { Authorization: `Bearer ${token}` };
+    return axios.get(`${config.API_URL}/publication`, { headers }).then((data) => data.data);
 }
 
-function create(p) {
-    publications.push(p);
-    return p;
+function create(token, formData) {
+    const headers = { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" };
+    return axios.post(`${config.API_URL}/publication`, formData, { headers }).then((data) => data.data);
 }
 
 function update(p) {
@@ -70,4 +75,4 @@ function iLike(publicationId, userId, like) {
     console.log(publicationId, userId, like);
 }
 
-export { findOne, getAll, create, update, deleteOne, iLike };
+export default { findOne, getAll, create, update, deleteOne, iLike };

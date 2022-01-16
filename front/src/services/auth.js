@@ -1,3 +1,6 @@
+import axios from "axios";
+import config from "../config";
+
 const users = [
     {
         id: '1',
@@ -22,18 +25,15 @@ const users = [
  * @return {?Object}
  */
 function sigIn(email, password) {
-    if (users.find(user => user.email === email && user.password === password)) {
-        return { token: 'fsfgg445544555' };
-    }
-    return null;
+    return axios.post(`${config.API_URL}/auth/login`, {
+        email, password
+    }, { headers: { "Content-Type": "application/json" } }).then(data => data.data);
 }
 
 function signUp(email, password, nom, prenom) {
-    if (users.find(user => user.email === email && user.password === password)) {
-        users.push({ email, password, nom, prenom });
-        return true;
-    }
-    return false;
+    return axios.post(`${config.API_URL}/auth/signup`, {
+        email, prenom, nom, password
+    }, { headers: { "Content-Type": "application/json" } }).then(data => data.data);
 }
 
 function getProfile(token) {

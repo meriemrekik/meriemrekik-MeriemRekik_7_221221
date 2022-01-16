@@ -4,6 +4,7 @@ import SignUpPage from '../views/SignUpPage.vue'
 import Home from '../views/Home.vue'
 import Detail from '../views/Detail.vue'
 import AddPublication from '../views/AddPublication.vue'
+import DetailProfile from '../views/DetailProfile.vue'
 import EditPublication from '../views/EditPublication.vue'
 import SignOut from '../views/SignOut.vue'
 import store from '../store'
@@ -39,6 +40,12 @@ const routes = [
     path: '/addPublication',
     name: 'AddPublication',
     component: AddPublication,
+    beforeEnter: requireAuth
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: DetailProfile,
     beforeEnter: requireAuth
   },
   {

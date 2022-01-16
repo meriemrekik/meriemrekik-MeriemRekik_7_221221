@@ -71,23 +71,29 @@ export default {
   methods: {
     signIn: function () {
       // const response = auth.sigIn(this.email, this.password);
-      const response = auth.sigIn(this.email, this.password);
-      if (response && response.token) {
-        const token = response.token;
-        // on garde le token dans le store
-        this.$store.commit("setToken", token);
-        // on recupère le profile de l'utilisateur
-        const profile = auth.getProfile(token);
-        // on met le profile dans le store
-        this.$store.commit("setProfile", profile);
-        // on lance une action pour récupèrer toutes les publications
-        this.$store.dispatch("getPublications");
+      auth
+        .sigIn(this.email, this.password)
+        .then((response) => {
+          if (response && response.token) {
+            const token = response.token;
+            // on garde le token dans le store
+            this.$store.commit("setToken", token);
+            // on recupère le profile de l'utilisateur
+            const profile = response.profile;
+            // on met le profile dans le store
+            this.$store.commit("setProfile", profile);
+            // on lance une action pour récupèrer toutes les publications
+            // this.$store.dispatch("getPublications");
 
-        this.$router.push("/");
-      } else {
-        console.log("error");
-        this.isLoginError = true;
-      }
+            this.$router.push("/");
+          } else {
+            this.isLoginError = true;
+          }
+        })
+        .catch((error) => {
+          this.isLoginError = true;
+          console.warn(error);
+        });
     },
   },
 };

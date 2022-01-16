@@ -13,13 +13,20 @@
         "
       >
         <div class="col-12 col-lg-9">
+          <h4>Publications les plus récentes</h4>
+          <div v-if="!allPublications.length">
+            Aucune Publications publiées pour le moment
+          </div>
           <Publication
-            v-for="(art, index) in publications"
+            v-for="(art, index) in allPublications"
             :key="index"
             :publication="art"
+            @publicationDeleted="removePublication"
           />
         </div>
-        <div class="col-12 col-lg-3">List des préférés</div>
+        <div class="col-12 col-lg-3">
+          <h4>Publications populaires</h4>
+        </div>
       </div>
     </div>
   </div>
@@ -30,7 +37,7 @@
 // import { onMounted } from "vue";
 import Menu from "@/components/Menu.vue";
 import Publication from "@/components/publications/Publication.vue";
-// const publicationService = require("../services/publication");
+// import publicationService from "../services/publication";
 
 export default {
   name: "Home",
@@ -39,71 +46,30 @@ export default {
       liensMenu: [
         { url: "/", text: "Accueil" },
         { url: "addPublication", text: "Ajouter une publication" },
+        { url: "profile", text: "Profile" },
         { url: "signIn", text: "Déconnexion" },
       ],
-      publications: [],
+      token: null,
     };
   },
   mounted() {
-    this.getAllPublications();
+    this.token = this.$store.state.token;
+    this.publications = this.$store.state.publications;
+    this.$store.dispatch("getPublications");
   },
   components: {
     Menu,
     Publication,
   },
   methods: {
-    mockAllPublications() {
-      this.publications = [
-        {
-          id: "1",
-          title: "Titre 1",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          date: "Wed Jan 05 2022 01:56:08 GMT+0100",
-          author: "rekik.meriem@gmail.com",
-          image: "https://img-9gag-fun.9cache.com/photo/aRrj54j_460swp.webp",
-          comments: 0,
-          likes: ["1"],
-          dislikes: ["2"],
-        },
-        {
-          id: "2",
-          title: "Titre 1",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          date: "Wed Jan 05 2022 01:06:08 GMT+0100",
-          author: "rekik.yasmine@gmail.com",
-          image: "https://img-9gag-fun.9cache.com/photo/a91AQQ1_460swp.webp",
-          comments: 3,
-          likes: ["2"],
-          dislikes: ["1"],
-        },
-        {
-          id: "3",
-          title: "Titre 1",
-          description:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          date: "Wed Jan 05 2022 00:06:08 GMT+0100",
-          author: "rekik.meriem@gmail.com",
-          image: "https://img-9gag-fun.9cache.com/photo/aVx3jjn_460swp.webp",
-          comments: 1,
-          likes: ["1", "2"],
-          dislikes: [],
-        },
-      ];
-    },
-    getAllPublications() {
-      this.mockAllPublications();
-      //récuperer les publications de la base de donnée
-      // utiliser axios pour récupérer toutes les publications
-      // ensuite les affecter dans le tableau publications
+    removePublication(id) {
+      this.publications = this.publications.filter((p) => p.id != id);
     },
   },
   computed: {
-    // allPublications() {
-    //   console.log(this.$store.state.publications);
-    //   return this.$store.state.publications;
-    // },
+    allPublications() {
+      return this.$store.state.publications;
+    },
   },
 };
 </script>
