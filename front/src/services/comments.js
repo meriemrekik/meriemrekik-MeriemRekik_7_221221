@@ -40,18 +40,10 @@ function create(p) {
     return p;
 }
 
-function update(p) {
-    const index = comments.findIndex(pub => pub.id == p.id);
-    if (index >= 0) {
-        comments[index] = { ...comments[index], ...p };
-    }
-    return comments[index];
-}
-
 function deleteOne(id) {
     const index = comments.findIndex(pub => pub.id == id);
     comments.splice(index, 1)
     return true;
 }
 
-export default { findOne, getAll, create, update, deleteOne };
+export default { findOne, getAll, create, deleteOne };

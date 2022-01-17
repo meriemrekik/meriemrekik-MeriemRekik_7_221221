@@ -13,7 +13,7 @@
       <textarea class="form-control" id="description" rows="3" minlength="20" maxlength="300" v-model="description" required></textarea>
     </div>
     <div id="preview"  class="col-12">
-      <img :src="publication.image" />
+      <img :src="publication.imageUrl" />
     </div>
     <div class="col-12">
       <button class="btn btn-primary" type="submit">Mettre à jour</button>

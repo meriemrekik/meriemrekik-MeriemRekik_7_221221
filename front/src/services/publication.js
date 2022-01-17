@@ -65,14 +65,16 @@ function update(p) {
     return publications[index];
 }
 
-function deleteOne(id) {
-    const index = publications.findIndex(pub => pub.id == id);
-    publications.splice(index, 1)
-    return true;
+function deleteOne(token, id) {
+    const headers = { Authorization: `Bearer ${token}` };
+    return axios.delete(`${config.API_URL}/publication/${id}`, { headers });
 }
 
-function iLike(publicationId, userId, like) {
-    console.log(publicationId, userId, like);
+function iLike(token, publicationId, like) {
+    const url = `${config.API_URL}/publication/${publicationId}/like`;
+    const headers = { Authorization: `Bearer ${token}` };
+    const body = { like };
+    return axios.post(url, body, { headers });
 }
 
 export default { findOne, getAll, create, update, deleteOne, iLike };

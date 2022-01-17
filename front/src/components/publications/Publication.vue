@@ -23,11 +23,11 @@
         <span v-else>Soyez le premier à poster un commentaire</span>
       </router-link>
       <p class="like-buttons">
-        <button type="button" class="btn like" v-on:click="iLike" v-bind:class="{ 'active': isCurrentUserLike }">
-          <i class="bi bi-hand-thumbs-up"></i> {{ publication.likes?.length }}
+        <button type="button" class="btn like" v-on:click="chooseLike" v-bind:class="{ 'active': isCurrentUserLike }">
+          <i class="bi bi-hand-thumbs-up"></i> {{ iLike?.length }}
         </button>
-        <button type="button" class="btn dislike" v-on:click="iDislike" v-bind:class="{ 'active': isCurrentUserDislike }">
-          <i class="bi bi-hand-thumbs-down"></i> {{ publication.dislikes?.length }}
+        <button type="button" class="btn dislike" v-on:click="chooseDislike" v-bind:class="{ 'active': isCurrentUserDislike }">
+          <i class="bi bi-hand-thumbs-down"></i> {{ iDislike?.length }}
         </button>
       </p>
       <p class="card-text">
@@ -59,7 +59,7 @@
 <script>
 // import { onMounted } from "vue";
 const formatDate = require("../../helper/formatDate");
-const publicationServ = require("../../services/publication");
+import publicationServ from "../../services/publication";
 
 export default {
   name: "Publication",
@@ -67,6 +67,9 @@ export default {
   data() {
     return {
       currentProfile: null,
+      iLike: [],
+      iDislike: [],
+      token: null,
       isCurrentUserLike: false,
       isCurrentUserDislike: false,
       formatDate,
@@ -79,53 +82,87 @@ export default {
   emits: {
     publicationDeleted: null,
   },
+  watch: {
+    publication: function (newPublication) {
+      if (newPublication) {
+        this.iLike = newPublication.iLike;
+        this.iDislike = newPublication.iDislike;
+        this.checkStyleButtonLike(newPublication);
+      }
+    },
+  },
   methods: {
     init() {
       // on recupere le profile de l'utilisateur dans le store
       this.currentProfile = this.$store.state.profile;
+      this.token = this.$store.state.token;
+    },
+    async chooseLike() {
+      console.log(this.publication);
+      const index = this.iLike.indexOf(this.currentProfile.id);
+      if (index >= 0) {
+        await publicationServ.iLike(this.token, this.publication.id, "0");
+        this.iLike.splice(index, 1);
+        this.checkStyleButtonLike();
+      } else {
+        await publicationServ.iLike(this.token, this.publication.id, "1");
+        this.iLike.push(this.currentProfile.id);
+        this.checkStyleButtonLike();
+      }
+      this.removeFromDislike();
+    },
+    async chooseDislike() {
+      const index = this.iDislike.indexOf(this.currentProfile.id);
+      if (index >= 0) {
+        await publicationServ.iLike(this.token, this.publication.id, "0");
+        this.iDislike.splice(index, 1);
+        this.checkStyleButtonLike();
+      } else {
+        await publicationServ.iLike(this.token, this.publication.id, "-1");
+        this.iDislike.push(this.currentProfile.id);
+        this.checkStyleButtonLike();
+      }
+      this.removeFromLike();
+    },
+    removeFromLike() {
+      const index = this.iLike.indexOf(this.currentProfile.id);
+      if (index >= 0) {
+        this.iLike.splice(index, 1);
+        this.checkStyleButtonLike();
+      }
+    },
+    removeFromDislike() {
+      const index = this.iDislike.indexOf(this.currentProfile.id);
+      if (index >= 0) {
+        this.iDislike.splice(index, 1);
+        this.checkStyleButtonLike();
+      }
+    },
+    checkStyleButtonLike() {
       if (this.currentProfile) {
         // Si l'id de l'utilisateur est dans les likes de la publication alors on affiche en vert le pouce vers le haut
-        this.publication.likes.indexOf(this.currentProfile.id) >= 0
+        this.iLike.indexOf(this.currentProfile.id) >= 0
           ? (this.isCurrentUserLike = true)
           : (this.isCurrentUserLike = false);
         // Si l'id de l'utilisateur est dans les dislikes de la publication alors on affiche en rouge le pouce vers le bas
-        this.publication.dislikes.indexOf(this.currentProfile.id) >= 0
+        this.iDislike.indexOf(this.currentProfile.id) >= 0
           ? (this.isCurrentUserDislike = true)
           : (this.isCurrentUserDislike = false);
       }
-    },
-    iLike() {
-      this.publication.likes.indexOf(this.currentProfile.id) >= 0
-        ? publicationServ.iLike(
-            this.publication.id,
-            this.currentProfile.id,
-            "0"
-          )
-        : publicationServ.iLike(
-            this.publication.id,
-            this.currentProfile.id,
-            "1"
-          );
-    },
-    iDislike() {
-      this.publication.dislikes.indexOf(this.currentProfile.id) >= 0
-        ? publicationServ.iLike(
-            this.publication.id,
-            this.currentProfile.id,
-            "0"
-          )
-        : publicationServ.iLike(
-            this.publication.id,
-            this.currentProfile.id,
-            "-1"
-          );
     },
     deletePublication() {
       console.log(
         `Axios lance le delete de la publication avec l'id ${this.publication.id}`
       );
-      this.$emit("publicationDeleted", this.publication.id);
-      this.$router.push("/");
+      publicationServ
+        .deleteOne(this.token, this.publication.id)
+        .then(() => {
+          this.$emit("publicationDeleted", this.publication.id);
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
     },
   },
 };

@@ -61,11 +61,15 @@ export default {
     CommentPublication,
   },
   methods: {
-    getPublication(id) {
-      publicationServ.findOne(this.token, id).then((p) => {
-        this.publication = p;
-        console.log(this.publication);
+    async getPublication(id) {
+      let newPublication = null;
+      await publicationServ.findOne(this.token, id).then((p) => {
+        newPublication = p;
+        console.log(p);
+        this.publication = JSON.parse(JSON.stringify(p));
+        return p;
       });
+      this.publication = newPublication;
     },
     getComment() {
       commentServ.getAll(this.token);

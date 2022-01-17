@@ -5,7 +5,7 @@
       class="comment"
       v-for="(comment, index) in comments"
       :key="index"
-      v-bind:class="{ 'my-comment': comment.author == currentProfile.email }"
+      v-bind:class="{ 'my-comment': comment.userId == currentProfile.id }"
     >
       <div>
         <div>

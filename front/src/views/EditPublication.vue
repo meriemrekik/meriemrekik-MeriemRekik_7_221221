@@ -19,7 +19,7 @@
           </router-link>
         </div>
         <div class="col-12">
-          <EditFormPublication :publication="publication" />
+          <EditFormPublication v-if="publication" :publication="publication" />
         </div>
       </div>
     </div>
@@ -29,16 +29,19 @@
 <script>
 // @ is an alias to /src
 import EditFormPublication from "@/components/publications/EditFormPublication.vue";
-const publicationServ = require("../services/publication");
+import publicationServ from "../services/publication";
+
 export default {
   name: "EditPublication",
   data() {
     return {
+      token: null,
       idPublication: null,
-      publication: {},
+      publication: null,
     };
   },
   mounted() {
+    this.token = this.$store.state.token;
     this.idPublication = this.$route.params.id || null;
     this.getPublication(this.idPublication);
   },
@@ -46,8 +49,15 @@ export default {
     EditFormPublication,
   },
   methods: {
-    getPublication(id) {
-      this.publication = publicationServ.findOne(id);
+    async getPublication(id) {
+      let newPublication = null;
+      await publicationServ.findOne(this.token, id).then((p) => {
+        newPublication = p;
+        console.log(p);
+        this.publication = JSON.parse(JSON.stringify(p));
+        return p;
+      });
+      this.publication = newPublication;
     },
   },
 };
