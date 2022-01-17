@@ -1,6 +1,7 @@
 const db = require('../db');
 const { decodeToken } = require('../middleware/auth');
 const { getNumberComments } = require('./comment');
+const { getUserLikePublication } = require('./like');
 const { getUserById } = require('./user');
 const Publication = db.publication;
 
@@ -70,6 +71,11 @@ exports.getAllPublication = async (req, res, next) => {
         await getNumberComments(p.id).then(c => {
             p.comments = c;
         })
+
+        await getUserLikePublication(p.id).then(l => {
+            p.iLike = l.like;
+            p.iDislike = l.dislike;
+        })
     }
 
     res.status(200).json(publications);
@@ -84,12 +90,17 @@ exports.getOnePublication = async (req, res, next) => {
             await getUserById(publication.userId).then(u => {
                 publication.user = u
             });
-            res.status(200).json({
-                ...publication,
-                comments: 0,
-                likes: [],
-                dislikes: []
-            });
+
+            await getNumberComments(publication.id).then(c => {
+                publication.comments = c;
+            })
+
+            await getUserLikePublication(publication.id).then(l => {
+                publication.iLike = l.like;
+                publication.iDislike = l.dislike;
+            })
+
+            res.status(200).json(publication);
         }
     ).catch(
         (error) => {

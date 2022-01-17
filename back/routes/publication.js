@@ -4,6 +4,7 @@ const router = express.Router();
 // on importe le publication controller
 const publicationCtrl = require("../controllers/publication");
 const commentCtrl = require("../controllers/comment");
+const likeCtrl = require("../controllers/like");
 
 // on importe nos middleware 
 const multer = require("../middleware/multer-config");
@@ -13,6 +14,8 @@ router.post('/', multer, auth.isAuthentified, publicationCtrl.createPublication)
 router.get('/', auth.isAuthentified, publicationCtrl.getAllPublication);
 router.get('/:id', auth.isAuthentified, publicationCtrl.getOnePublication);
 router.delete('/:id', auth.isUser, publicationCtrl.deletePublication);
+
+router.post('/:id/like', auth.isAuthentified, likeCtrl.like);
 
 router.get('/:id/comment', auth.isAuthentified, commentCtrl.getAllCommentPublication);
 router.post('/:id/comment', auth.isAuthentified, commentCtrl.createComment);
