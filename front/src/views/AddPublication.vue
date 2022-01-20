@@ -21,7 +21,7 @@ export default {
         { url: "/", text: "Accueil" },
         { url: "addPublication", text: "Ajouter une publication" },
         { url: "profile", text: "Profile" },
-        { url: "signIn", text: "Déconnexion" },
+        { url: "signOut", text: "Déconnexion" },
       ],
     };
   },

@@ -19,12 +19,18 @@
           </router-link>
         </div>
         <div class="col-12">
-          <Publication v-if="publication" :publication="publication" />
+          <Publication
+            v-if="publication"
+            :publication="publication"
+            :displayNbComments="false"
+            @publicationDeleted="removePublication"
+          />
         </div>
         <div class="col-12">
           <CommentPublication
             :idPublication="idPublication"
             :comments="comments"
+            @commentAdded="newComment"
           />
         </div>
       </div>
@@ -65,14 +71,22 @@ export default {
       let newPublication = null;
       await publicationServ.findOne(this.token, id).then((p) => {
         newPublication = p;
-        console.log(p);
         this.publication = JSON.parse(JSON.stringify(p));
         return p;
       });
       this.publication = newPublication;
     },
     getComment() {
-      commentServ.getAll(this.token);
+      commentServ.getAll(this.token, this.idPublication).then((c) => {
+        this.comments = c;
+      });
+    },
+    newComment(c) {
+      this.comments.push(c);
+    },
+    removePublication(id) {
+      this.$store.dispatch("deletePublication", id);
+      this.$router.push("/");
     },
   },
 };

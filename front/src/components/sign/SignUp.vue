@@ -102,7 +102,7 @@
                 </div>
               </div>
 
-              <div class="col-md-6 offset-md-4">
+              <div class="col-md-6 offset-md-4 mt-5">
                 <button type="submit" class="btn btn-primary">Valider</button>
                 <div v-if="isSignUpError">
                   Une erreure est intervenue et vous n'avez pas pu être inscrit

@@ -1,20 +1,17 @@
 <template lang="">
 <div class="container-fluid">
-  <form class="row g-3 needs-validation"  @submit.prevent="sendForm">
-    <div class="col-12">
-      <label for="titre" class="form-label">Titre</label>
-      <input type="text" class="form-control" id="titre" v-model="title" required>
-      <div class="invalid-feedback">
-        Looks bad
-      </div>
+  <h4><i class="bi bi-bookmark-star-fill"></i> Rédiger une nouvelle publication</h4>
+  <form class="row g-3 needs-validation mt-4"  @submit.prevent="sendForm">
+    <div class="col-12 pb-4">
+      <input type="text" class="form-control" id="titre" placeholder="Titre de votre publication" v-model="title" required>
     </div>
-    <div class="col-12">
-      <label for="description" class="form-label">Description</label>
-      <textarea class="form-control" id="description" rows="3" minlength="20" maxlength="300" v-model="description" required></textarea>
+    <div class="col-12 pb-4">
+      <textarea class="form-control"  placeholder="Description en quelques mots de votre Publication"  id="description" rows="3" minlength="20" maxlength="300" v-model="description" required></textarea>
+      <small class="form-text text-muted">{{ description.length }}/300 caractères maximum.</small>
     </div>
-    <div class="col-12">
-      <label for="formFile" class="form-label">Uploader votre image (jpg/jpeg/png/gif)</label>
+    <div class="col-12 pb-4">
       <input class="form-control" type="file" id="formFile" accept=".gif,.jpg,.jpeg,.png" @change="onFileChange($event)" required>
+      <small class="form-text text-muted"><i class="bi bi-upload"></i> Uploader votre image au format (jpg/jpeg/png/gif)</small>
     </div>
     <div id="preview">
       <img v-if="urlPreview" :src="urlPreview" />

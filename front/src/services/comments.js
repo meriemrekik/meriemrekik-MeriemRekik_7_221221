@@ -1,49 +1,28 @@
-const comments = [
-    {
-        id: "1",
-        idPublication: "",
-        date: "Wed Jan 12 2022 21:44:38 GMT+0100 (heure normale d’Europe centrale)",
-        author: "rekik.meriem@gmail.com",
-        text: "Image qui m'a beaucoup amusé !!!",
-    },
-    {
-        id: "2",
-        idPublication: "",
-        date: "Wed Jan 12 2022 21:44:38 GMT+0100 (heure normale d’Europe centrale)",
-        author: "teste@gmail.com",
-        text: "Très amusant !!!",
-    },
-    {
-        id: "3",
-        idPublication: "",
-        date: "Wed Jan 12 2022 21:44:38 GMT+0100 (heure normale d’Europe centrale)",
-        author: "rekik.meriem@gmail.com",
-        text: "Oui c'est pour ca que je vous l'ai partagé !!!",
-    },
-];
+import axios from "axios";
+import config from "../config";
 
 /**
  * @param {String} id
  *
  * @return {?Object}
  */
-function findOne(id) {
-    return comments.find(p => parseInt(p.id) === id) || null;
+
+function getAll(token, publicationId) {
+    const url = `${config.API_URL}/publication/${publicationId}/comment`;
+    const headers = { Authorization: `Bearer ${token}` };
+    return axios.get(url, { headers }).then((data) => data.data);
 }
 
-function getAll() {
-    return comments;
+function create(token, publicationId, comment) {
+    const url = `${config.API_URL}/publication/${publicationId}/comment`;
+    const headers = { Authorization: `Bearer ${token}` };
+    return axios.post(url, { comment: { content: comment } }, { headers }).then((data) => data.data);
 }
 
-function create(p) {
-    comments.push(p);
-    return p;
+function deleteComment(token, publicationId, commentId) {
+    const url = `${config.API_URL}/publication/${publicationId}/comment/${commentId}`;
+    const headers = { Authorization: `Bearer ${token}` };
+    return axios.delete(url, { headers }).then((data) => data.data);
 }
 
-function deleteOne(id) {
-    const index = comments.findIndex(pub => pub.id == id);
-    comments.splice(index, 1)
-    return true;
-}
-
-export default { findOne, getAll, create, deleteOne };
+export default { getAll, create, deleteComment };

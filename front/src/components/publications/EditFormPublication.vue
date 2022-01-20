@@ -1,6 +1,6 @@
 <template lang="">
 <div class="container-fluid">
-  <form class="row g-3 needs-validation"  @submit.prevent="sendForm">
+  <form class="row g-3 needs-validation"  @submit.prevent="updatePublication">
     <div class="col-12">
       <label for="titre" class="form-label">Titre</label>
       <input type="text" class="form-control" id="titre" v-model="title" required>
@@ -22,7 +22,7 @@
 </div>
 </template>
 <script>
-// import axios from "axios";
+import publicationService from "../../services/publication";
 export default {
   name: "EditFormPublication",
   props: ["publication"],
@@ -30,23 +30,25 @@ export default {
     return {
       title: "",
       description: "",
+      token: "",
     };
   },
   mounted() {
     this.title = this.publication.title;
+    this.token = this.$store.state.token;
     this.description = this.publication.description;
   },
   methods: {
-    sendForm() {
-      // console.log(this.title, this.description, this.file);
-
-      let formData = new FormData();
-
-      formData.append("title", this.title);
-      formData.append("description", this.description);
-      formData.forEach((e) => {
-        console.log(e);
-      });
+    updatePublication() {
+      publicationService
+        .update(this.token, this.publication.id, {
+          title: this.title,
+          description: this.description,
+        })
+        .then((p) => {
+          this.$store.dispatch("updatePublication", p[0]);
+          this.$router.push("/");
+        });
     },
   },
 };

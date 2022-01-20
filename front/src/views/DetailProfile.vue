@@ -13,21 +13,26 @@
         "
       >
         <div class="col-12">
-          <h1>Mon Profile</h1>
-          <p>
-            <span class="label">Nom </span>
-            {{ currentProfile.nom }}
-          </p>
-          <p>
-            <span class="label">Prénom</span>
-            {{ currentProfile.prenom }}
-          </p>
-          <p>
-            <span class="label">Email</span>
-            {{ currentProfile.email }}
-          </p>
+          <h4><i class="bi bi-person-circle"></i> Mon Profile</h4>
+          <div id="profile-container" class="mt-5 mb-5">
+            <p>
+              <span class="label">Nom </span>
+              {{ currentProfile.nom }}
+            </p>
+            <p>
+              <span class="label">Prénom</span>
+              {{ currentProfile.prenom }}
+            </p>
+            <p>
+              <span class="label">Email</span>
+              {{ currentProfile.email }}
+            </p>
 
-          Souhaitez-vous supprimer votre Profile ?<br />
+            <p v-if="currentProfile.isAdmin">
+              Vous êtes identifié sur ce site en tant qu'Administrateur.
+            </p>
+          </div>
+
           <a
             class="btn btn-danger btn-sm"
             href="#"
@@ -103,7 +108,7 @@ export default {
         { url: "/", text: "Accueil" },
         { url: "addPublication", text: "Ajouter une publication" },
         { url: "profile", text: "Profile" },
-        { url: "signIn", text: "Déconnexion" },
+        { url: "signOut", text: "Déconnexion" },
       ],
     };
   },
@@ -112,7 +117,7 @@ export default {
     Menu,
   },
   methods: {
-      deleteUser: function () {
+    deleteUser: function () {
       console.log("Suppression avec axios de l'utilisateur");
     },
   },
@@ -128,7 +133,8 @@ export default {
   margin-top: 60px;
 }
 .label {
-  width: 120px;
+  display: inline-block;
+  width: 100px;
 }
 </style>
 

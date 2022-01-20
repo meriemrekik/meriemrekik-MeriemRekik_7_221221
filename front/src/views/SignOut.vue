@@ -12,9 +12,13 @@ export default {
       liensMenu: [
         { url: "/", text: "Accueil" },
         { url: "addPublication", text: "Ajouter une publication" },
-        { url: "signIn", text: "Déconnexion" },
+        { url: "signOut", text: "Déconnexion" },
       ],
     };
+  },
+  mounted() {
+    this.$store.dispatch("disconnect");
+    this.$router.push("/");
   },
   components: {
     Menu,

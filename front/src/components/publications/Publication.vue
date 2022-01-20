@@ -1,11 +1,8 @@
 <template lang="">
-  <div v-if="publication" class="card mb-5">
+  <div v-if="publication" class="card publication mb-5">
     <div class="card-header">
       <h5 class="card-title">{{ publication.title }}</h5>
-    </div>
-    <img v-bind:src="publication.imageUrl" class="card-img-top" alt="...">
-    <div class="card-body">
-      <div v-if="publication?.userId == currentProfile?.id" class="">
+      <div v-if="publication?.userId == currentProfile?.id || currentProfile?.isAdmin" class="publication-actions">
         <router-link :to="'/publication/'+publication.id+'/edit'" exact>
           <a class="btn btn-primary btn-sm" href="#" role="button"
               >Editer</a
@@ -15,23 +12,31 @@
           >Supprimer
           </a>
       </div>
-      <div class="card-text">
-        <p>{{ publication.description }}</p>
-      </div>
-      <router-link :to="'/publication/'+publication.id">
-        <span v-if="publication.comments">{{publication.comments}} commentaires</span>
-        <span v-else>Soyez le premier à poster un commentaire</span>
-      </router-link>
-      <p class="like-buttons">
+    </div>
+    <img v-bind:src="publication.imageUrl" class="card-img-top" alt="...">
+    <div class="card-body">
+      <div class="publication-popularity">
+      <span class="like-buttons">
         <button type="button" class="btn like" v-on:click="chooseLike" v-bind:class="{ 'active': isCurrentUserLike }">
           <i class="bi bi-hand-thumbs-up"></i> {{ iLike?.length }}
         </button>
         <button type="button" class="btn dislike" v-on:click="chooseDislike" v-bind:class="{ 'active': isCurrentUserDislike }">
           <i class="bi bi-hand-thumbs-down"></i> {{ iDislike?.length }}
         </button>
-      </p>
-      <p class="card-text">
-        <small class="text-muted">Publié par {{ publication.author }} {{ formatDate.displayDateAndHour(publication.createdAt) }}</small>
+      </span>
+
+       <router-link v-if="displayNbComments" :to="'/publication/'+publication.id">
+        <span v-if="publication.comments">{{publication.comments}} commentaires <i class="bi bi-chat-text"></i></span>
+        <span v-else>Soyez le premier à poster un commentaire <i class="bi bi-chat-text"></i></span>
+      </router-link>
+      </div>
+
+      <div class="description card-text">
+        <p>{{ publication.description }}</p>
+      </div>
+
+      <p class="author card-text">
+        <small class="text-muted">Publié par {{ publication.user.prenom }} {{ publication.user.nom }} {{ formatDate.displayDateAndHour(publication.createdAt) }}</small>
       </p>
     </div>
   </div>
@@ -63,7 +68,15 @@ import publicationServ from "../../services/publication";
 
 export default {
   name: "Publication",
-  props: ["publication"],
+  props: {
+    publication: {
+      type: Object,
+    },
+    displayNbComments: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       currentProfile: null,
@@ -87,7 +100,7 @@ export default {
       if (newPublication) {
         this.iLike = newPublication.iLike;
         this.iDislike = newPublication.iDislike;
-        this.checkStyleButtonLike(newPublication);
+        this.checkStyleButtonLike();
       }
     },
   },
@@ -96,9 +109,11 @@ export default {
       // on recupere le profile de l'utilisateur dans le store
       this.currentProfile = this.$store.state.profile;
       this.token = this.$store.state.token;
+      this.iLike = this.publication.iLike;
+      this.iDislike = this.publication.iDislike;
+      this.checkStyleButtonLike();
     },
     async chooseLike() {
-      console.log(this.publication);
       const index = this.iLike.indexOf(this.currentProfile.id);
       if (index >= 0) {
         await publicationServ.iLike(this.token, this.publication.id, "0");
@@ -151,14 +166,10 @@ export default {
       }
     },
     deletePublication() {
-      console.log(
-        `Axios lance le delete de la publication avec l'id ${this.publication.id}`
-      );
       publicationServ
         .deleteOne(this.token, this.publication.id)
         .then(() => {
           this.$emit("publicationDeleted", this.publication.id);
-          this.$router.push("/");
         })
         .catch((error) => {
           console.warn(error);
@@ -170,10 +181,19 @@ export default {
 <style lang="scss">
 .card {
   background-color: #f2f2f2;
+  &.publication {
+    max-width: 750px;
+    margin: 0 auto;
+  }
   .card-header {
     padding: 0.75rem 1.25rem;
     margin-bottom: 0;
     background-color: rgba(0, 0, 0, 0.03);
+    display: flex;
+    justify-content: space-between;
+    .publication-actions > * {
+      margin-left: 0.8em;
+    }
   }
   .card-img-top {
     height: 100%;
@@ -184,11 +204,27 @@ export default {
   }
   .card-body {
     background-color: #fff;
+
+    .publication-popularity {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      a {
+        text-decoration: none;
+      }
+    }
+
+    .description {
+      padding-top: 1.25em;
+      padding-bottom: 0.5em;
+    }
+
     .like-buttons {
       font-size: 22px;
       .btn {
         background-color: slategray;
         color: #fff;
+        margin-left: 0.85em;
       }
       .active {
         // &.bi-hand-thumbs-up-fill {
@@ -200,6 +236,10 @@ export default {
           background-color: red;
         }
       }
+    }
+
+    .author {
+      text-align: right;
     }
   }
 }
