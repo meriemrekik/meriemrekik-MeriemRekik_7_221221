@@ -16,18 +16,10 @@ exports.like = async (req, res, next) => {
         });
         return false;
     } else if (req.body.like == "-1" || req.body.like == "1") {
-        console.log(req.body);
         const monLike = await Like.findOne({
             where: { userId, publicationId },
-        })/*.then((like)=>{
-            if (!like) {
-                console.log("You should create One");
-            } else {
-                console.log(like);
-            }
-        }).catch((error)=>{
+        })
 
-        });*/
         if (!monLike) {
             await Like.create({
                 value: req.body.like,
@@ -41,7 +33,7 @@ exports.like = async (req, res, next) => {
             monLike.value = req.body.like;
             monLike.save();
         }
-        console.log(monLike);
+
         res.status(201).json({ message: `On a ajouté votre ${req.body.like == "1" ? "like" : "dislike"} de cette publication` });
         return false;
     } else {

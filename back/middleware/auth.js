@@ -55,7 +55,6 @@ module.exports.decodeToken = (req) => {
         const token = req.headers.authorization.split(' ')[1];
         // on décode le token
         const decodedToken = jwt.verify(token, config.random_token_secret);
-        console.log(decodedToken);
         return decodedToken
     } catch {
         throw 'Invalid Token';

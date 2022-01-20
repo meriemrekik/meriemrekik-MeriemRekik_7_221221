@@ -27,6 +27,7 @@ exports.signup = (req, res, next) => {
                     profile: {
                         id: userCreated.id,
                         nom: userCreated.nom,
+                        isAdmin: userCreated.isAdmin,
                         prenom: userCreated.prenom,
                         email: userCreated.email,
                     },
@@ -34,6 +35,7 @@ exports.signup = (req, res, next) => {
                         {
                             id: userCreated.id,
                             nom: userCreated.nom,
+                            isAdmin: userCreated.isAdmin,
                             prenom: userCreated.prenom,
                             email: userCreated.email,
                         },
@@ -69,12 +71,14 @@ exports.login = (req, res, next) => {
                         profile: {
                             id: user.id,
                             nom: user.nom,
+                            isAdmin: user.isAdmin,
                             prenom: user.prenom,
                             email: user.email,
                         },
                         token: jwt.sign(
                             {
                                 id: user.id,
+                                isAdmin: user.isAdmin,
                                 nom: user.nom,
                                 prenom: user.prenom,
                                 email: user.email,
@@ -91,7 +95,8 @@ exports.login = (req, res, next) => {
 
 exports.deleteUser = (req, res, next) => {
     const userId = decodeToken(req);
-    if (userId != req.params.id) {
+    const userIsAdmin = decodeToken(req).isAdmin;
+    if (userId != req.params.id && !userIsAdmin) {
         res.status(401).json({ message: "Vous n'avez pas le droit de supprimer ce user" })
         return false;
     }
@@ -110,6 +115,7 @@ exports.getUserById = function (userId) {
         return User.findOne({ where: { id: userId }, raw: true }).then((u) => {
             return {
                 id: u.id,
+                isAdmin: u.isAdmin,
                 nom: u.nom,
                 prenom: u.prenom,
             }

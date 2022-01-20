@@ -1,5 +1,6 @@
 const db = require('../db');
 const { decodeToken } = require('../middleware/auth');
+const { getUserById } = require('./user');
 const Comment = db.comment;
 
 exports.createComment = (req, res, next) => {
@@ -8,7 +9,8 @@ exports.createComment = (req, res, next) => {
     // on parse le json
     const commentObject = req.body.comment;
     const publicationId = req.params.id;
-    const userId = decodeToken(req).id;
+    const currentUser = decodeToken(req);
+    const userId = currentUser.id;
     const comment = {
         ...commentObject,
         userId,
@@ -16,10 +18,14 @@ exports.createComment = (req, res, next) => {
     };
     Comment.create(comment).then(
         (c) => {
-            console.log('CREATION SUCCESS')
+            c.dataValues.user = {
+                id: currentUser.id,
+                nom: currentUser.nom,
+                prenom: currentUser.prenom,
+            }
             res.status(201).json({
                 message: 'Commentaire ajouté avec succès !',
-                comment: c
+                comment: c,
             });
         }
     ).catch(
@@ -37,7 +43,12 @@ exports.getAllCommentPublication = (req, res, next) => {
     const publicationId = req.params.id;
     // on récupère toute les commentaires disponible
     Comment.findAll({ where: { publicationId }, raw: true, order: [['createdAt', 'DESC']] }).then(
-        (comments) => {
+        async (comments) => {
+            for (const comment of comments) {
+                await getUserById(comment.userId).then((u) => {
+                    comment.user = u;
+                })
+            }
             res.status(200).json(comments);
         }
     ).catch(
@@ -49,12 +60,28 @@ exports.getAllCommentPublication = (req, res, next) => {
     );
 }
 
+const getCommentById = function (id) {
+    return new Promise((resolve, reject) => {
+        return Comment.findOne({ where: { id }, raw: true }).then(value => resolve(value));
+    })
+}
+
 exports.deleteComment = (req, res, next) => {
-    Comment.destroy({ where: { id: req.params.id_comment } })
-        .then(c => {
-            res.status(200).json({ message: 'Commentaire supprimé !' })
-        })
-        .catch(error => res.status(500).json({ error }));
+    const id_comment = req.params.id_comment;
+    const user = decodeToken(req);
+    console.log(id_comment)
+    getCommentById(id_comment).then((currentComment) => {
+        console.log(currentComment);
+        if (user.id != currentComment.userId && !user.isAdmin) {
+            res.status(403).json({ message: 'Vous ne pouvez pas supprimer ce commentaire' });
+            return;
+        }
+        Comment.destroy({ where: { id: id_comment } })
+            .then(c => {
+                res.status(200).json({ message: 'Commentaire supprimé !' })
+            })
+            .catch(error => res.status(500).json({ error }));
+    });
 };
 
 exports.getNumberComments = function (publicationId) {
@@ -62,5 +89,6 @@ exports.getNumberComments = function (publicationId) {
         return Comment.count({ where: { publicationId } }).then(value => resolve(value))
     })
 }
+
 
 

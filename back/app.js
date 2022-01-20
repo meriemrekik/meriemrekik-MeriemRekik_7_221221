@@ -1,22 +1,11 @@
 //importation des packages de express
 
 const express = require('express');
-// const bodyParser = require('body-parser');
-// const mongoose = require('mongoose');
 const config = require('./config');
 const rateLimit = require('./middleware/rate-limit');
 
 const app = express();
 app.use(express.json());
-/*
-app.use((req, res, next) => {
-    //qui peut accéder à l'API
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
-*/
 const cors = require('cors');
 app.use(cors());
 
