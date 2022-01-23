@@ -6,11 +6,13 @@ const router = express.Router();
 const { body, check, validationResult } = require('express-validator');
 const rateLimit = require('../middleware/rate-limit');
 
+const auth = require("../middleware/auth");
+
 // on import le controller user
 const userCtrl = require('../controllers/user');
 
 router.post('/signup',
-    // rateLimit.createAccountLimiter,
+    rateLimit.createAccountLimiter,
     body('email').isEmail(),
     check('password')
         .isLength({ min: 8 })
@@ -33,11 +35,18 @@ router.post('/signup',
 );
 
 router.post('/login',
-    // rateLimit.loginAccountLimiter,
+    rateLimit.loginAccountLimiter,
     body('email').isEmail(), userCtrl.login);
 
+
+router.get('/:id',
+    auth.isAuthentified,
+    rateLimit.loginAccountLimiter,
+    userCtrl.getProfileById);
+
 router.delete('/:id',
-    // rateLimit.loginAccountLimiter,
+    auth.isAuthentified,
+    rateLimit.loginAccountLimiter,
     userCtrl.deleteUser);
 
 module.exports = router;//export du router

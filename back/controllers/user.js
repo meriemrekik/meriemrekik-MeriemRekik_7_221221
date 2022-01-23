@@ -94,31 +94,44 @@ exports.login = (req, res, next) => {
 };
 
 exports.deleteUser = (req, res, next) => {
-    const userId = decodeToken(req);
+    const userId = decodeToken(req).id;
     const userIsAdmin = decodeToken(req).isAdmin;
+    console.log(userId + ' != ' + req.params.id + ' && ' + !userIsAdmin);
     if (userId != req.params.id && !userIsAdmin) {
         res.status(401).json({ message: "Vous n'avez pas le droit de supprimer ce user" })
         return false;
     }
+    console.log('try to delete');
     User.findOne({ where: { id: req.params.id } })
         .then(user => {
-            User.deleteOne({ where: { id: req.params.id } })
+            User.destroy({ where: { id: req.params.id } })
                 .then(() => res.status(200).json({ message: 'User supprimé !' }))
                 .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
 };
 
-exports.getUserById = function (userId) {
-    let user = null;
+exports.getProfileById = function (req, res, next) {
+    const id = req.params.id;
+    getUserById(id).then((user) => {
+        res.status(200).json(user);
+    }).catch((error) => {
+        res.status(404).json({ message: "user not found" });
+    })
+}
+
+const getUserById = function (userId) {
     return new Promise((resolve, reject) => {
         return User.findOne({ where: { id: userId }, raw: true }).then((u) => {
             return {
                 id: u.id,
                 isAdmin: u.isAdmin,
+                email: u.email,
                 nom: u.nom,
                 prenom: u.prenom,
             }
         }).then(value => resolve(value));
     });
 }
+
+exports.getUserById = getUserById;

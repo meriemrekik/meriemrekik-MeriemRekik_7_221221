@@ -5,7 +5,7 @@ const rateLimit = require("express-rate-limit");
 // que peut faire une seule personne sur un temps définit
 exports.bruteForceLimiter = rateLimit({
     windowMs: 10 * 60 * 1000, // plage de 10 minutes
-    max: 200, // bloquer après 200 requests
+    max: 300, // bloquer après 300 requests
     message:
         "Trop d'appels à l'API depuis cet IP, veuillez réessayer après 10 minutes"
 });

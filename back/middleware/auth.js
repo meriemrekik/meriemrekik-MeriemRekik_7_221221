@@ -23,9 +23,14 @@ module.exports.isUser = (req, res, next) => {
         // on décode le token
         const decodedToken = jwt.verify(token, config.random_token_secret);
         const userId = decodedToken.userId;
-        // si dans le body de notre requete on trouve un userId
-        // et que celui ci ne correspond pas à la valeur du token on mes une erreur
-        if (req.body.userId) {
+        const isAdmin = decodedToken.isAdmin;
+
+        // Si on est admin alors on est autorisé de presque tout
+        if (isAdmin) {
+            next();
+        } else if (req.body.userId) {
+            // si dans le body de notre requete on trouve un userId
+            // et que celui ci ne correspond pas à la valeur du token on mes une erreur
             if (req.body.userId !== userId) {
                 throw 'Invalid user ID';
             } else {
