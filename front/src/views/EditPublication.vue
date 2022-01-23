@@ -11,7 +11,7 @@
           auto,justify-content-md-center,|}
         "
       >
-        <div class="col-12">
+        <div class="col-12 mb-5">
           <router-link :to="'/'" exact>
             <a class="btn btn-primary btn-sm" href="#" role="button"
               >Retour page accueil</a
@@ -53,7 +53,6 @@ export default {
       let newPublication = null;
       await publicationServ.findOne(this.token, id).then((p) => {
         newPublication = p;
-        console.log(p);
         this.publication = JSON.parse(JSON.stringify(p));
         return p;
       });

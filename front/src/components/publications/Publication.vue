@@ -36,7 +36,7 @@
       </div>
 
       <p class="author card-text">
-        <small class="text-muted">Publié par {{ publication.user.prenom }} {{ publication.user.nom }} {{ formatDate.displayDateAndHour(publication.createdAt) }}</small>
+        <small class="text-muted">Publié par <router-link :to="'/profile/'+publication.user.id" >{{ publication.user.prenom }} {{ publication.user.nom }}</router-link> {{ formatDate.displayDateFromNow(publication.createdAt) }}</small>
       </p>
     </div>
   </div>

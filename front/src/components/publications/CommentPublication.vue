@@ -8,27 +8,26 @@
       v-bind:class="{ 'my-comment': comment.userId == currentProfile.id }"
     >
       <div>
+        <div class="message-action" v-if="canDelete(comment)">
+          <a
+            href="#"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteComment"
+            v-on:click="focusComment(comment)"
+            ><i class="bi bi-trash"></i
+          ></a>
+        </div>
         <div>
           {{ comment.content }}
         </div>
-        <span v-if="comment.user" class="author"
-          >Par {{ comment.user.prenom }} {{ comment.user.nom }}</span
+        <span v-if="comment.user" class="author">
+          <router-link :to="'/profile/' + comment.user.id"
+            >{{ comment.user.prenom }} {{ comment.user.nom }}</router-link
+          ></span
         >
         <span class="date" v-if="comment.createdAt">
-          le {{ formatDate.displayDate(comment.createdAt) }} à
-          {{ formatDate.displayHour(comment.createdAt) }}
+          &nbsp;{{ formatDate.displayDateFromNow(comment.createdAt) }}
         </span>
-        <div v-if="canDelete(comment)">
-          <small>
-            <a
-              href="#"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteComment"
-              v-on:click="focusComment(comment)"
-              >Supprimer</a
-            >
-          </small>
-        </div>
       </div>
     </div>
     <div class="input-comment-container">
@@ -77,7 +76,15 @@
         </div>
         <div class="modal-body">
           Etes-vous sure de vouloir supprimer ce commentaire :
-          {{ selectedComment.content }} ?
+          <p class="italic bold comment-citation">
+            {{ selectedComment.content }} ?<br />
+            <span class="author">
+              <router-link :to="'/profile/' + selectedComment.user.id"
+                >{{ selectedComment.user.prenom }}
+                {{ selectedComment.user.nom }}</router-link
+              >
+            </span>
+          </p>
         </div>
         <div class="modal-footer">
           <button
@@ -112,8 +119,10 @@ export default {
     commentAdded: null,
   },
   watch: {
+    // On surveille si la props des commentaires change ou pas
     comments: function (newComments) {
       if (newComments) {
+        // On crée une copie des tableaux
         this.mutableComments = newComments;
       } else {
         this.mutableComments = [];
@@ -124,6 +133,9 @@ export default {
     return {
       token: null,
       comment: null,
+      // on crée une copie du tableau des commentaires
+      // Comme les props sont immutables, si on veut les modifier
+      // il vaut mieux travailler avec une copie du tableau
       mutableComments: [],
       currentProfile: {},
       formatDate,
@@ -154,8 +166,7 @@ export default {
       const idCommentToDelete = this.selectedComment.id;
       commentService
         .deleteComment(this.token, this.idPublication, idCommentToDelete)
-        .then((del) => {
-          console.log(del);
+        .then(() => {
           this.mutableComments = this.mutableComments.filter(
             (c) => c.id != idCommentToDelete
           );
@@ -185,14 +196,14 @@ export default {
 
     > div {
       max-width: 60%;
-      background-color: #ff9f51;
+      background-color: #ffb980;
       border-radius: 8px;
       display: inline-block;
       padding: 8px;
     }
     .author,
     .date {
-      font-size: small;
+      font-size: 0.8em;
     }
 
     &.my-comment {
@@ -201,6 +212,20 @@ export default {
         background-color: rgb(149, 149, 247);
       }
     }
+
+    .message-action {
+      text-align: right;
+      a {
+        text-decoration: none;
+        color: #2c3e50;
+      }
+    }
+  }
+}
+.comment-citation {
+  text-align: center;
+  .author {
+    font-size: 0.8em;
   }
 }
 </style>

@@ -2,40 +2,91 @@ import axios from "axios";
 import config from "../config";
 
 /**
+ * @param {String} token
  * @param {String} id
  *
- * @return {?Object}
+ * @return {Promise}
  */
 function findOne(token, id) {
     const headers = { Authorization: `Bearer ${token}` };
     return axios.get(`${config.API_URL}/publication/${id}`, { headers }).then((data) => data.data);
 }
 
+/**
+ * @param {String} token
+ *
+ * @return {Promise}
+ */
 function getAll(token) {
     const headers = { Authorization: `Bearer ${token}` };
     return axios.get(`${config.API_URL}/publication`, { headers }).then((data) => data.data);
 }
 
+/**
+ * @param {String} token
+ *
+ * @return {Promise}
+ */
 function getPopulaire(token) {
     const headers = { Authorization: `Bearer ${token}` };
     return axios.get(`${config.API_URL}/publication/populaire`, { headers }).then((data) => data.data);
 }
 
-function create(token, formData) {
+/**
+ * @param {String} token
+ * @param {String} title
+ * @param {String} description
+ * @param {File}   file
+ *
+ * @return {Promise}
+ */
+function create(token, title, description, file) {
+    let formData = new FormData();
+    const publication = {
+        title,
+        description,
+    };
+    formData.append("publication", JSON.stringify(publication));
+    formData.append("image", file);
+
     const headers = { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" };
     return axios.post(`${config.API_URL}/publication`, formData, { headers }).then((data) => data.data);
 }
 
-function update(token, id, formData) {
+/**
+ * @param {String} token
+ * @param {String} id Publication ID
+ * @param {String} title
+ * @param {String} description
+ *
+ * @return {Promise}
+ */
+function update(token, id, title, description) {
+    const formData = {
+        title, description
+    }
     const headers = { Authorization: `Bearer ${token}` };
-    return axios.put(`${config.API_URL}/publication/${id}`, formData, { headers, data: formData }).then((data) => data.data);
+    return axios.put(`${config.API_URL}/publication/${id}`, formData, { headers }).then((data) => data.data);
 }
 
+/**
+ * @param {String} token
+ * @param {String} id
+ *
+ * @return {Promise}
+ */
 function deleteOne(token, id) {
     const headers = { Authorization: `Bearer ${token}` };
     return axios.delete(`${config.API_URL}/publication/${id}`, { headers });
 }
 
+/**
+ * @param {String} token
+ * @param {String} publicationId
+ * @param {String} like 3 valeurs possible => "1" = j'aime, "0" = ni aimer ni ne pas aimer ou "-1" = je n'aime pas.
+ *
+ * @return {Promise}
+ */
 function iLike(token, publicationId, like) {
     const url = `${config.API_URL}/publication/${publicationId}/like`;
     const headers = { Authorization: `Bearer ${token}` };

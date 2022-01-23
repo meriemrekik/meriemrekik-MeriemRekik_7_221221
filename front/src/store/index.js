@@ -11,7 +11,10 @@ const initState = () => {
   }
 };
 export default createStore({
+  // on initialize le state de notre application
   state: initState(),
+  // les mutations sont des fonctions qui nous permettent de modifier
+  // certaines propriétés de notre state.
   mutations: {
     setToken(state, token) {
       state.token = token;
@@ -35,7 +38,9 @@ export default createStore({
       } else {
         state.publications.unshift(publication);
       }
-
+      // comme la liste des publications normales et populaires 
+      // peuvent contenir des publications identique alors quand on mes à jour une publication dans une
+      // on verifie si elle apparait pas dans l'autre et on la modifie
       index = state.publicationsPopulaire.findIndex(p => p.id == publication.id);
       if (index >= 0) {
         state.publicationsPopulaire[index] = { ...state.publicationsPopulaire[index], ...publication };
@@ -46,6 +51,10 @@ export default createStore({
 
     }
   },
+  // Les actions c'est des sortent de mutations
+  // mais pour lesquels on fait appel à des requetes http
+  // Une fois qu'on a fait notre call on utilise la mutitation qui nous interesse
+  // pour mettre à jour notre state
   actions: {
     getPublications(context) {
       publicationsService.getAll(this.state.token).then((p) => {

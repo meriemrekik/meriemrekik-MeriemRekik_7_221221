@@ -10,6 +10,7 @@
       <small class="form-text text-muted">{{ description.length }}/300 caractères maximum.</small>
     </div>
     <div class="col-12 pb-4">
+      <!-- Bouton pour upload d'image -->
       <input class="form-control" type="file" id="formFile" accept=".gif,.jpg,.jpeg,.png" @change="onFileChange($event)" required>
       <small class="form-text text-muted"><i class="bi bi-upload"></i> Uploader votre image au format (jpg/jpeg/png/gif)</small>
     </div>
@@ -28,7 +29,6 @@ import publicationService from "../../services/publication";
 
 export default {
   name: "AddFormPublication",
-  props: [],
   data() {
     return {
       urlPreview: null,
@@ -42,23 +42,20 @@ export default {
     this.token = this.$store.state.token;
   },
   methods: {
+    // fonction déclenché à chaque fois que l'input File change de valeure
     onFileChange(e) {
+      // Si on a bien recu un fichier
       if (e.target.files[0]) {
         this.file = e.target.files[0];
+        // On crée un lien permettant d'afficher cet objet
         this.urlPreview = URL.createObjectURL(this.file);
       }
     },
     sendForm() {
-      let formData = new FormData();
-      const publication = {
-        title: this.title,
-        description: this.description,
-      };
-      formData.append("publication", JSON.stringify(publication));
-      formData.append("image", this.file);
       publicationService
-        .create(this.token, formData)
+        .create(this.token, this.title, this.description, this.file)
         .then(() => {
+          // Si la publication s'est bien crée on retourne à l'accueil
           this.$router.push("/");
         })
         .catch((error) => {

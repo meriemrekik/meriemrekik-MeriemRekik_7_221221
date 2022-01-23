@@ -11,7 +11,7 @@
           auto,justify-content-md-center,|}
         "
       >
-        <div class="col-12">
+        <div class="col-12 mb-5">
           <router-link :to="'../'" exact>
             <a class="btn btn-primary btn-sm" href="#" role="button"
               >Retour page accueil</a

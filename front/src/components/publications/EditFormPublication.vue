@@ -41,10 +41,7 @@ export default {
   methods: {
     updatePublication() {
       publicationService
-        .update(this.token, this.publication.id, {
-          title: this.title,
-          description: this.description,
-        })
+        .update(this.token, this.publication.id, this.title, this.description)
         .then((p) => {
           this.$store.dispatch("updatePublication", p[0]);
           this.$router.push("/");

@@ -17,18 +17,18 @@
           <div id="profile-container" class="mt-5 mb-5">
             <p>
               <span class="label">Nom </span>
-              {{ currentProfile.nom }}
+              {{ userDisplayed.nom }}
             </p>
             <p>
               <span class="label">Prénom</span>
-              {{ currentProfile.prenom }}
+              {{ userDisplayed.prenom }}
             </p>
             <p>
               <span class="label">Email</span>
-              {{ currentProfile.email }}
+              {{ userDisplayed.email }}
             </p>
 
-            <p v-if="currentProfile.isAdmin">
+            <p v-if="userDisplayed.isAdmin">
               Vous êtes identifié sur ce site en tant qu'Administrateur.
             </p>
           </div>
@@ -98,12 +98,14 @@
 // @ is an alias to /src
 // import { onMounted } from "vue";
 import Menu from "@/components/Menu.vue";
-// const publicationService = require("../services/publication");
+const authUserService = require("../services/auth");
 
 export default {
   name: "DetailProfile",
   data() {
     return {
+      userDisplayed: {},
+      token: null,
       liensMenu: [
         { url: "/", text: "Accueil" },
         { url: "addPublication", text: "Ajouter une publication" },
@@ -112,20 +114,41 @@ export default {
       ],
     };
   },
-  mounted() {},
+  mounted() {
+    this.token = this.$store.state.token;
+    const idUserRequested = this.$route.params.id;
+    if (this.$store.state.profile.isAdmin && idUserRequested) {
+      // on récupère l'utilisateur que l'ont veut afficher
+      authUserService
+        .getUser(this.token, idUserRequested)
+        .then((user) => {
+          this.userDisplayed = user;
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+    } else {
+      this.userDisplayed = this.$store.state.profile;
+    }
+  },
   components: {
     Menu,
   },
   methods: {
     deleteUser: function () {
-      console.log("Suppression avec axios de l'utilisateur");
+      authUserService
+        .deleteUser(this.token, this.userDisplayed.id)
+        .then((result) => {
+          console.log(result);
+          if (this.$store.state.profile.isAdmin) {
+            this.$router.push("/");
+          } else {
+            this.$router.push("/signOut");
+          }
+        });
     },
   },
-  computed: {
-    currentProfile: function () {
-      return this.$store.state.profile;
-    },
-  },
+  computed: {},
 };
 </script>
 <style lang="scss">

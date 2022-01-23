@@ -1,5 +1,5 @@
 <template>
-  <div class="container-md">
+  <div class="main container-md">
     <router-view />
   </div>
 </template>
@@ -19,6 +19,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  margin-bottom: 4em;
 }
 
 #nav {
@@ -32,5 +33,13 @@
       color: #42b983;
     }
   }
+}
+
+.italic {
+  font-style: italic;
+}
+
+.bold {
+  font-weight: bolder;
 }
 </style>

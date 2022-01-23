@@ -1,4 +1,6 @@
+// On utilise la librairie Moment por manipler l'affichage des dates
 const moment = require("moment");
+moment.locale('fr');
 
 const displayDate = function (stringDate) {
     const maDate = new Date(stringDate);
@@ -14,4 +16,11 @@ const displayDateAndHour = function (stringDate) {
     return `le ${displayDate(stringDate)} à ${displayHour(stringDate)}`;
 }
 
-module.exports = { displayDate, displayHour, displayDateAndHour }
+const displayDateFromNow = function (stringDate) {
+    const maDate = new Date(stringDate);
+    return moment(maDate, "DD/MM/YYYY").fromNow() || null;
+};
+
+
+
+module.exports = { displayDate, displayHour, displayDateAndHour, displayDateFromNow }

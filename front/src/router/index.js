@@ -9,14 +9,21 @@ import EditPublication from '../views/EditPublication.vue'
 import SignOut from '../views/SignOut.vue'
 import store from '../store'
 
+// On définit une Guard
+// C'est une fonction que l'on execute avant d'acceder à une routes
+// Si on passe la fonction alors on accède à la route, sinon on est bloqué
 const requireAuth = function (to, from, next) {
+  // Cette Guard vérifie que l'on est bien connecté
   if (store.state.token) {
     next();
   } else {
+    // Sinon on est redirigé vers la page de connexion
     console.warn("Vous n'etes pas connectés");
     next('signIn');
   }
 }
+
+// On définit les routes dans notre application
 const routes = [
   {
     path: '/',
@@ -43,7 +50,7 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/profile',
+    path: '/profile/:id?',
     name: 'Profile',
     component: DetailProfile,
     beforeEnter: requireAuth

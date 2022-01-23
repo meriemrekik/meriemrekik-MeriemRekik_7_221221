@@ -12,9 +12,6 @@ import AddFormPublication from "@/components/publications/AddFormPublication.vue
 
 export default {
   name: "AddPublication",
-  // mounted() {
-  // this.mamethode2();
-  //},
   data() {
     return {
       liensMenu: [
@@ -28,14 +25,6 @@ export default {
   components: {
     Menu,
     AddFormPublication,
-  },
-  methods: {
-    /*  mamethode(){
-      console.log(etest)
-    },
-    mamethode2(){
-      console.log(etest)
-    }*/
   },
 };
 </script>
