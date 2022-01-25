@@ -7,7 +7,7 @@ const config = require('../config');
 const db = require("../db");
 const { decodeToken } = require('../middleware/auth');
 const User = db.user;
-const Op = db.Sequelize.Op;
+
 // Fonction pour s'enregistrer comme utilisateur
 exports.signup = (req, res, next) => {
     // on hash le password qui est dans le body
@@ -96,12 +96,12 @@ exports.login = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
     const userId = decodeToken(req).id;
     const userIsAdmin = decodeToken(req).isAdmin;
-    console.log(userId + ' != ' + req.params.id + ' && ' + !userIsAdmin);
+
     if (userId != req.params.id && !userIsAdmin) {
         res.status(401).json({ message: "Vous n'avez pas le droit de supprimer ce user" })
         return false;
     }
-    console.log('try to delete');
+
     User.findOne({ where: { id: req.params.id } })
         .then(user => {
             User.destroy({ where: { id: req.params.id } })

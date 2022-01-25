@@ -1,12 +1,13 @@
 //importation des packages de express
 
 const express = require('express');
+const cors = require('cors');
 const config = require('./config');
 const rateLimit = require('./middleware/rate-limit');
 
 const app = express();
 app.use(express.json());
-const cors = require('cors');
+
 app.use(cors());
 
 

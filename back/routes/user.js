@@ -36,7 +36,8 @@ router.post('/signup',
 
 router.post('/login',
     rateLimit.loginAccountLimiter,
-    body('email').isEmail(), userCtrl.login);
+    body('email').isEmail(),
+    userCtrl.login);
 
 
 router.get('/:id',
