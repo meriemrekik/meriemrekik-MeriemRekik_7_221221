@@ -182,6 +182,8 @@ export default {
 };
 </script>
 <style lang="scss">
+@import "src/assets/scss/style.scss";
+
 .comment-container {
   background-color: rgb(250, 250, 250);
   max-width: 750px;
@@ -217,7 +219,7 @@ export default {
       text-align: right;
       a {
         text-decoration: none;
-        color: #2c3e50;
+        color: $primary-color;
       }
     }
   }

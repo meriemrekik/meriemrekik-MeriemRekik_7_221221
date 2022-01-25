@@ -1,0 +1,48 @@
+.card.publication {
+    background-color: #f2f2f2;
+    
+      max-width: 750px;
+      margin: 0 auto;
+
+    .card-header {
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 0;
+      background-color: rgba(0, 0, 0, 0.03);
+      display: flex;
+      justify-content: space-between;
+      .card-title {
+          margin-bottom: 0;
+      }
+      .publication-actions > * {
+        margin-left: 0.8em;
+      }
+    }
+    .card-img-top {
+      height: 100%;
+      width: 100%;
+      max-width: 400px;
+      max-height: 650px;
+      margin: 0 auto;
+    }
+    .card-body {
+      background-color: #fff;
+  
+      .publication-popularity {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        a {
+          text-decoration: none;
+        }
+      }
+  
+      .description {
+        padding-top: 1.25em;
+        padding-bottom: 0.5em;
+      }
+  
+      .author {
+        text-align: right;
+      }
+    }
+  }

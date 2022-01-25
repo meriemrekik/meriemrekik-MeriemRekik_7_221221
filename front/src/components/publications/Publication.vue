@@ -1,7 +1,7 @@
 <template lang="">
   <div v-if="publication" class="card publication mb-5">
     <div class="card-header">
-      <h5 class="card-title">{{ publication.title }}</h5>
+      <h4 class="card-title">{{ publication.title }}</h4>
       <div v-if="publication?.userId == currentProfile?.id || currentProfile?.isAdmin" class="publication-actions">
         <router-link :to="'/publication/'+publication.id+'/edit'" exact>
           <a class="btn btn-primary btn-sm" href="#" role="button"
@@ -18,10 +18,10 @@
       <div class="publication-popularity">
       <span class="like-buttons">
         <button type="button" class="btn like" v-on:click="chooseLike" v-bind:class="{ 'active': isCurrentUserLike }">
-          <i class="bi bi-hand-thumbs-up"></i> {{ iLike?.length }}
+          <i class="bi bi-hand-thumbs-up-fill"></i> <span class="nombre">{{ iLike?.length }}</span>
         </button>
         <button type="button" class="btn dislike" v-on:click="chooseDislike" v-bind:class="{ 'active': isCurrentUserDislike }">
-          <i class="bi bi-hand-thumbs-down"></i> {{ iDislike?.length }}
+          <i class="bi bi-hand-thumbs-down-fill"></i> <span class="nombre">{{ iDislike?.length }}</span>
         </button>
       </span>
 
@@ -179,68 +179,4 @@ export default {
 };
 </script>
 <style lang="scss">
-.card {
-  background-color: #f2f2f2;
-  &.publication {
-    max-width: 750px;
-    margin: 0 auto;
-  }
-  .card-header {
-    padding: 0.75rem 1.25rem;
-    margin-bottom: 0;
-    background-color: rgba(0, 0, 0, 0.03);
-    display: flex;
-    justify-content: space-between;
-    .publication-actions > * {
-      margin-left: 0.8em;
-    }
-  }
-  .card-img-top {
-    height: 100%;
-    width: 100%;
-    max-width: 400px;
-    max-height: 650px;
-    margin: 0 auto;
-  }
-  .card-body {
-    background-color: #fff;
-
-    .publication-popularity {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      a {
-        text-decoration: none;
-      }
-    }
-
-    .description {
-      padding-top: 1.25em;
-      padding-bottom: 0.5em;
-    }
-
-    .like-buttons {
-      font-size: 22px;
-      .btn {
-        background-color: slategray;
-        color: #fff;
-        margin-left: 0.85em;
-      }
-      .active {
-        // &.bi-hand-thumbs-up-fill {
-        &.like {
-          background-color: green;
-        }
-        // &.bi-hand-thumbs-down-fill, dis {
-        &.dislike {
-          background-color: red;
-        }
-      }
-    }
-
-    .author {
-      text-align: right;
-    }
-  }
-}
 </style>

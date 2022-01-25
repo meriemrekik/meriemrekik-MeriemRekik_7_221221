@@ -1,16 +1,16 @@
 <template>
-  <div class="container">
+  <div class="container sign-component">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
           <div class="card-header">Se Connecter</div>
           <div class="card-body">
             <form @submit.prevent="signIn">
-              <div class="form-group row mb-2">
+              <div class="form-group row mb-2 mt-3">
                 <label
                   for="email_address"
                   class="col-md-4 col-form-label text-md-right"
-                  >Addresse Email</label
+                  >Adresse Email</label
                 >
                 <div class="col-md-6">
                   <input
@@ -42,10 +42,12 @@
                   />
                 </div>
               </div>
-              <div class="col-md-6 offset-md-4 mt-5">
-                <button type="submit" class="btn btn-primary">Valider</button>
+              <div class="mt-4">
+                <div class="center">
+                  <button type="submit" class="btn btn-primary">Valider</button>
+                </div>
 
-                <div v-if="isLoginError">
+                <div class="mt-3" v-if="isLoginError">
                   L'email ou le mot de passe renseigné ne correspondent à aucun
                   compte connu
                 </div>
@@ -98,5 +100,5 @@ export default {
   },
 };
 </script>
-<style lang="">
+<style lang="scss">
 </style>

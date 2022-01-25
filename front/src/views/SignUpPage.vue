@@ -1,6 +1,8 @@
 <template>
   <Menu :liens="liensMenu" />
-  <SignUp />
+  <div class="container-md">
+    <SignUp />
+  </div>
 </template>
 
 <script>

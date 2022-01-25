@@ -1,0 +1,29 @@
+@import '../base/colors.scss';
+
+.like-buttons {
+    font-size: 22px;
+    .btn {
+      background-color: $light-color;
+      color: #fff;
+      margin-left: 0.85em;
+      &:first-child {
+          margin-left: 0;
+        }
+        /*
+        padding: 0;
+        height: 40px;
+        width: 40px;
+      border-radius: 50%;
+*/
+    }
+    .active {
+      // &.bi-hand-thumbs-up-fill {
+      &.like {
+        background-color: $valid-color;
+      }
+      // &.bi-hand-thumbs-down-fill, dis {
+      &.dislike {
+        background-color: $invalid-color;
+      }
+    }
+  }

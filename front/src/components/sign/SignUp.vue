@@ -1,16 +1,16 @@
 <template>
-  <div class="container">
+  <div class="container sign-component">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
           <div class="card-header">Créer mon compte</div>
           <div class="card-body">
             <form @submit.prevent="signUp">
-              <div class="form-group row mb-2">
+              <div class="form-group row mb-2 mt-3">
                 <label
                   for="email_address"
                   class="col-md-4 col-form-label text-md-right"
-                  >Addresse Email</label
+                  >Adresse Email</label
                 >
                 <div class="col-md-8">
                   <input
@@ -102,9 +102,11 @@
                 </div>
               </div>
 
-              <div class="col-md-6 offset-md-4 mt-5">
-                <button type="submit" class="btn btn-primary">Valider</button>
-                <div v-if="isSignUpError">
+              <div class="mt-4">
+                <div class="center">
+                  <button type="submit" class="btn btn-primary">Valider</button>
+                </div>
+                <div class="mt-3" v-if="isSignUpError">
                   Une erreure est intervenue et vous n'avez pas pu être inscrit
                   sur le site.
                 </div>
@@ -201,5 +203,5 @@ export default {
   },
 };
 </script>
-<style lang="">
+<style lang="scss">
 </style>

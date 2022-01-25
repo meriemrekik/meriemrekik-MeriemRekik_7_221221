@@ -1,6 +1,8 @@
 <template>
   <Menu :liens="liensMenu" />
-  <AddFormPublication />
+  <div class="container-md">
+    <AddFormPublication />
+  </div>
 </template>
 
 <script>
