@@ -1,5 +1,5 @@
 <template>
-  <div class="container-md !direction !spacing home">
+  <div class="container-md !direction !spacing">
     <div
       class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}"
     >

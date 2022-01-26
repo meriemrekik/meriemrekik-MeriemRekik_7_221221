@@ -13,7 +13,9 @@
         "
       >
         <div class="col-12 col-lg-9 pb-5">
-          <h4><i class="bi bi-globe"></i> Publications les plus récentes</h4>
+          <h4 class="mb-5">
+            <i class="bi bi-globe"></i> Publications les plus récentes
+          </h4>
           <div v-if="!allPublications.length">
             Aucune Publications publiées pour le moment
           </div>
@@ -25,7 +27,9 @@
           />
         </div>
         <div class="col-12 col-lg-3">
-          <h4><i class="bi bi-star-fill"></i> Publications populaires</h4>
+          <h4 class="mb-5">
+            <i class="bi bi-star-fill"></i> Publications populaires
+          </h4>
           <div>
             <div v-if="!allPublications.length">
               Aucune Publications populaire pour le moment

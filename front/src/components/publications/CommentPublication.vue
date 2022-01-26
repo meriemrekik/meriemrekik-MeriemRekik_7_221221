@@ -8,49 +8,54 @@
       v-bind:class="{ 'my-comment': comment.userId == currentProfile.id }"
     >
       <div>
-        <div class="message-action" v-if="canDelete(comment)">
-          <a
-            href="#"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteComment"
-            v-on:click="focusComment(comment)"
-            ><i class="bi bi-trash"></i
-          ></a>
+        <div class="message-content">
+          <div class="message-action mb-1" v-if="canDelete(comment)">
+            <span v-if="comment.user" class="author">
+              <router-link :to="'/profile/' + comment.user.id"
+                >{{ comment.user.prenom }} {{ comment.user.nom }}</router-link
+              ></span
+            >
+            <a
+              href="#"
+              class="icon-delete"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteComment"
+              v-on:click="focusComment(comment)"
+              ><i class="bi bi-trash"></i
+            ></a>
+          </div>
+          <div>
+            {{ comment.content }}
+          </div>
         </div>
-        <div>
-          {{ comment.content }}
+        <div class="signature-message">
+          <span class="date" v-if="comment.createdAt">
+            &nbsp;{{ formatDate.displayDateFromNow(comment.createdAt) }}
+          </span>
         </div>
-        <span v-if="comment.user" class="author">
-          <router-link :to="'/profile/' + comment.user.id"
-            >{{ comment.user.prenom }} {{ comment.user.nom }}</router-link
-          ></span
-        >
-        <span class="date" v-if="comment.createdAt">
-          &nbsp;{{ formatDate.displayDateFromNow(comment.createdAt) }}
-        </span>
       </div>
     </div>
-    <div class="input-comment-container">
-      <form class="row g-3 needs-validation" @submit.prevent="sendComment">
-        <div class="col-12">
-          <label for="comment" class="form-label">Votre commentaire</label>
-          <textarea
-            class="form-control"
-            id="comment"
-            v-model="comment"
-            rows="3"
-            minlength="1"
-            maxlength="300"
-            required
-          ></textarea>
-        </div>
-        <div class="col-12">
-          <button class="btn btn-primary" type="submit">
-            Publier commentaire
-          </button>
-        </div>
-      </form>
-    </div>
+  </div>
+  <div class="input-comment-container">
+    <form class="row g-3 needs-validation" @submit.prevent="sendComment">
+      <div class="col-12">
+        <label for="comment" class="form-label">Votre commentaire</label>
+        <textarea
+          class="form-control"
+          id="comment"
+          v-model="comment"
+          rows="3"
+          minlength="1"
+          maxlength="300"
+          required
+        ></textarea>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">
+          Publier commentaire
+        </button>
+      </div>
+    </form>
   </div>
 
   <!-- Modal -->
@@ -182,52 +187,4 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "src/assets/scss/style.scss";
-
-.comment-container {
-  background-color: rgb(250, 250, 250);
-  max-width: 750px;
-  margin: 0 auto;
-
-  .input-comment-container {
-    background-color: whitesmoke;
-  }
-  .comment {
-    margin-bottom: 1em;
-    display: flex;
-
-    > div {
-      max-width: 60%;
-      background-color: #ffb980;
-      border-radius: 8px;
-      display: inline-block;
-      padding: 8px;
-    }
-    .author,
-    .date {
-      font-size: 0.8em;
-    }
-
-    &.my-comment {
-      justify-content: end;
-      > div {
-        background-color: rgb(149, 149, 247);
-      }
-    }
-
-    .message-action {
-      text-align: right;
-      a {
-        text-decoration: none;
-        color: $primary-color;
-      }
-    }
-  }
-}
-.comment-citation {
-  text-align: center;
-  .author {
-    font-size: 0.8em;
-  }
-}
 </style>

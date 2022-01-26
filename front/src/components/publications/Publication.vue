@@ -3,14 +3,18 @@
     <div class="card-header">
       <h4 class="card-title">{{ publication.title }}</h4>
       <div v-if="publication?.userId == currentProfile?.id || currentProfile?.isAdmin" class="publication-actions">
-        <router-link :to="'/publication/'+publication.id+'/edit'" exact>
-          <a class="btn btn-primary btn-sm" href="#" role="button"
-              >Editer</a
-            >
-        </router-link>
-        <a class="btn btn-danger btn-sm" href="#" role="button"  data-bs-toggle="modal" :data-bs-target="'#publication'+publication.id"
-          >Supprimer
-          </a>
+        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Editer">
+          <router-link :to="'/publication/'+publication.id+'/edit'" exact>
+            <a class="btn btn-primary btn-sm" href="#" role="button" 
+                ><i class="bi bi-pencil-square"></i></a
+              >
+          </router-link>
+        </span>
+        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Supprimer">
+          <a class="btn btn-danger btn-sm" href="#" role="button"  data-bs-toggle="modal" :data-bs-target="'#publication'+publication.id"  
+            ><i class="bi bi-trash"></i>
+            </a>
+          </span>
       </div>
     </div>
     <img v-bind:src="publication.imageUrl" class="card-img-top" alt="...">
