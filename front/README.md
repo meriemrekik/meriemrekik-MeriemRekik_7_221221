@@ -28,3 +28,5 @@ export default {
     API_URL: 'http://localhost:3000/api'
 }
 ````
+
+L'application est desormais disponible sur le navigateur à l'adresse [http://localhost:8080/](http://localhost:8080/)
