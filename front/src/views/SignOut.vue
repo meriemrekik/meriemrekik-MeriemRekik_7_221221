@@ -17,6 +17,7 @@ export default {
     };
   },
   mounted() {
+    // On previent le store qu'il doit déclencher l'action de déconnecter l'utilisateur
     this.$store.dispatch("disconnect");
     this.$router.push("/");
   },

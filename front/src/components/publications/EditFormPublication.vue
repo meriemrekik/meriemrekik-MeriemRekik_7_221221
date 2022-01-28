@@ -25,6 +25,7 @@
 import publicationService from "../../services/publication";
 export default {
   name: "EditFormPublication",
+  // on récupère la publication depuis le composant parent
   props: ["publication"],
   data() {
     return {
@@ -34,16 +35,20 @@ export default {
     };
   },
   mounted() {
-    this.title = this.publication.title;
+    // Quand le composant est initialisé
+    // on recupère notre token dans le store
     this.token = this.$store.state.token;
+    this.title = this.publication.title;
     this.description = this.publication.description;
   },
   methods: {
+    // On lance l'update de la publication
     updatePublication() {
       publicationService
         .update(this.token, this.publication.id, this.title, this.description)
-        .then((p) => {
-          this.$store.dispatch("updatePublication", p[0]);
+        .then(() => {
+          // On redirige l'utilisateur vers la page d'accueil
+          // une fois que la publication a été mise à jour
           this.$router.push("/");
         });
     },

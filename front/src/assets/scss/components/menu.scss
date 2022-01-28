@@ -1,74 +1,94 @@
-#menu-hamburger {
+.header {
+  background-color: $primary-color;
+
+  .logo {
+    max-height: 30px;
+    width: auto;
+  }
+  .nav-pills a.nav-link {
+    color: #fff;
+    margin: 0 0.8em;
+    &.router-link-active {
+      // border-bottom: 3px solid #fff;
+      // border-radius: 0;
+      background-color: $secondary-font-color;
+      color: #fff;
+    }
+  }
+  
+  #menu-hamburger {
     position: absolute;
     right: 1em;
     top: 1.2em;
     label{
-        display:flex;
-     flex-direction:column;
-     width:30px;
-     cursor:pointer;
-   }
-   
-   label span{
-     background: #fff;
-     border-radius:10px;
-     height:3px;
-     margin: 3px 0;
-     transition: .4s  cubic-bezier(0.68, -0.6, 0.32, 1.6);
-   
-   }
-   
-   
-   span:nth-of-type(1){
-     width:50%;
-     
-   }
-   
-   span:nth-of-type(2){
-     width:100%;
-   }
-   
-   
-   span:nth-of-type(3){
-     width:75%;
+      display:flex;
+      flex-direction:column;
+      width:30px;
+      cursor:pointer;
+    }
     
-   }
-   
-   
-   input[type="checkbox"]{
-     display:none;
-   }
-   
-   
-   &.opened {
-
-       
-       span:nth-of-type(1){
-           transform-origin:bottom;
-           transform:rotatez(45deg) translate(3px,0px)
-        }
-   
-        
-        span:nth-of-type(2){
-            
-            transform-origin:top;
-            transform:rotatez(-45deg)
-        }
-        
-        
-        span:nth-of-type(3){
-            
-            transform-origin:bottom;
-            width:50%;
-            transform: translate(13px,-5px) rotatez(45deg);
-            
-        }
+    label span{
+      background: #fff;
+      border-radius:10px;
+      height:3px;
+      margin: 3px 0;
+      transition: .4s  cubic-bezier(0.68, -0.6, 0.32, 1.6);
+      
     }
    
-}
-
-
-.menu-mobile {
+    
+    span:nth-of-type(1){
+     width:50%;
+     
+    }
+    
+    span:nth-of-type(2){
+      width:100%;
+    }
+    
+    
+    span:nth-of-type(3){
+      width:75%;
+      
+    }
+    
+    
+    input[type="checkbox"]{
+      display:none;
+    }
+    
+    
+    &.opened {
+      
+      
+      span:nth-of-type(1){
+        transform-origin:bottom;
+        transform:rotatez(45deg) translate(3px,0px)
+      }
+      
+      
+      span:nth-of-type(2){
+        
+        transform-origin:top;
+        transform:rotatez(-45deg)
+      }
+      
+      
+      span:nth-of-type(3){
+        
+        transform-origin:bottom;
+        width:50%;
+        transform: translate(13px,-5px) rotatez(45deg);
+        
+      }
+    }
+    
+  }
+  
+  
+  .menu-mobile {
     text-align: center;
+  }
+  
+  
 }
-

@@ -50,7 +50,7 @@ const routes = [
     beforeEnter: requireAuth
   },
   {
-    path: '/profile/:id?',
+    path: '/profile/:id?', // ? => signifie que l'id est optionnel
     name: 'Profile',
     component: DetailProfile,
     beforeEnter: requireAuth

@@ -67,10 +67,18 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
+        <div
+          v-if="this.$store.state.profile.id == userDisplayed.id"
+          class="modal-body"
+        >
           Etes-vous sure de vouloir supprimer votre profile ? Toutes les
           publications que vous avez réalisé ainsi que les commentaires et likes
           associés à ce compte seront perdu pour toujours.
+        </div>
+        <div v-else class="modal-body">
+          Etes-vous sure de vouloir supprimer le profile de cet utilisateur ?
+          Toutes les publications qu'il a réalisé ainsi que tous ses
+          commentaires et likes associés seront perdu pour toujours.
         </div>
         <div class="modal-footer">
           <button
@@ -86,7 +94,7 @@
             data-bs-dismiss="modal"
             v-on:click="deleteUser()"
           >
-            Oui je supprimer
+            Oui je supprime
           </button>
         </div>
       </div>
@@ -115,21 +123,34 @@ export default {
     };
   },
   mounted() {
+    // on recupère le token présent dans notre store
     this.token = this.$store.state.token;
-    const idUserRequested = this.$route.params.id;
-    if (this.$store.state.profile.isAdmin && idUserRequested) {
-      // on récupère l'utilisateur que l'ont veut afficher
-      authUserService
-        .getUser(this.token, idUserRequested)
-        .then((user) => {
-          this.userDisplayed = user;
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
+
+    let idUserRequested = null;
+    // Si on a un id dans la route que l'on veut afficher
+    // ET (Si l'utilisateur est un admin
+    // ou si l'id dans la route et le même que son id de profile)
+    if (
+      this.$route.params.id &&
+      (this.$store.state.profile.isAdmin ||
+        this.$store.state.profile.id == this.$route.params.id)
+    ) {
+      // on va recuperer l'utilisateur avec l'id dans notre url
+      idUserRequested = this.$route.params.id;
     } else {
-      this.userDisplayed = this.$store.state.profile;
+      // sinon on récupèrera le profile de l'utilisateur connecté maintenant
+      idUserRequested = this.$store.state.profile.id;
     }
+
+    // on récupère l'utilisateur que l'ont veut afficher
+    authUserService
+      .getUser(this.token, idUserRequested)
+      .then((user) => {
+        this.userDisplayed = user;
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   },
   components: {
     Menu,
@@ -138,13 +159,15 @@ export default {
     deleteUser: function () {
       authUserService
         .deleteUser(this.token, this.userDisplayed.id)
-        .then((result) => {
-          console.log(result);
+        .then(() => {
           if (this.$store.state.profile.isAdmin) {
             this.$router.push("/");
           } else {
             this.$router.push("/signOut");
           }
+        })
+        .catch((error) => {
+          console.warn(error);
         });
     },
   },

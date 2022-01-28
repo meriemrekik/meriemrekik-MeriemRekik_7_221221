@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-container">
+  <div id="comment-container" class="comment-container">
     <div v-if="!mutableComments.length">Aucun commentaire pour le moment</div>
     <div
       class="comment"
@@ -37,9 +37,10 @@
     </div>
   </div>
   <div class="input-comment-container">
+    <hr />
     <form class="row g-3 needs-validation" @submit.prevent="sendComment">
       <div class="col-12">
-        <label for="comment" class="form-label">Votre commentaire</label>
+        <label for="comment" class="form-label">Ajouter un commentaire</label>
         <textarea
           class="form-control"
           id="comment"
@@ -51,9 +52,7 @@
         ></textarea>
       </div>
       <div class="col-12">
-        <button class="btn btn-primary" type="submit">
-          Publier commentaire
-        </button>
+        <button class="btn btn-primary" type="submit">Publier</button>
       </div>
     </form>
   </div>
@@ -137,30 +136,48 @@ export default {
   data() {
     return {
       token: null,
+      // objet utilisé pour créer un nouveau commentaire
       comment: null,
       // on crée une copie du tableau des commentaires
       // Comme les props sont immutables, si on veut les modifier
       // il vaut mieux travailler avec une copie du tableau
       mutableComments: [],
       currentProfile: {},
+      // on récupère dans une variable formatDate le script formatDate
       formatDate,
       selectedComment: null,
     };
   },
   mounted() {
+    // On fait une copie du tableau des commentaires que l'on récupère dans les props
+    // On fait une copie parce que les props sont des variable immutables dans Vue
+    // Ca veut dire qu'on ne peut pas les modifier, donc pour pouvoir supprimer un commentaire ou en ajouter un autre
+    // On va plutot travailler avec une copie des  commentaires
     this.mutableComments = [...this.comments];
+    // On récupère le profile présent dans le store
     this.currentProfile = this.$store.state.profile;
+    // On récupère le token dans le state
     this.token = this.$store.state.token;
+    // on execute une fonction qui nous fait scroller en bas de la zone de commentaire
+    setTimeout(() => {
+      var container = document.querySelector("#comment-container");
+      container.scrollTop = container.scrollHeight;
+    }, 400);
   },
   methods: {
+    // fonction qui permet de définir quel commentaire
+    // à afficher dans la modale de DELETE
     focusComment(comment) {
       this.selectedComment = comment;
     },
+    // Fonction executer quand on crée un commentaire
     sendComment() {
       commentService
         .create(this.token, this.idPublication, this.comment)
         .then((c) => {
+          // on vide le champ d'ajout de commentaire
           this.comment = null;
+          // on prévient le composant parents qu'il y a un nouveau commentaire à ajouter
           this.$emit("commentAdded", c.comment);
         })
         .catch((error) => {
@@ -168,16 +185,21 @@ export default {
         });
     },
     deleteComment() {
+      // on récupère l'id du commentaire que l'on affiche dans la modale pour le supprimer
       const idCommentToDelete = this.selectedComment.id;
       commentService
         .deleteComment(this.token, this.idPublication, idCommentToDelete)
         .then(() => {
+          // Quand on a supprimé le commentaire
+          // on le retire du tableau des commentaires qu'on affiche
           this.mutableComments = this.mutableComments.filter(
             (c) => c.id != idCommentToDelete
           );
         });
     },
+    // Fonction qu'on utilise pour savoir si le commentaire peut etre supprimé par l'utilisateur
     canDelete(comment) {
+      // un admin ou l'auteur du commentaire peuvent supprimer le commentaire
       return (
         this.currentProfile.isAdmin || comment.userId == this.currentProfile.id
       );

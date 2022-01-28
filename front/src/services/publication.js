@@ -2,6 +2,8 @@ import axios from "axios";
 import config from "../config";
 
 /**
+ * Trouver une publication par son Id.
+ * 
  * @param {String} token
  * @param {String} id
  *
@@ -13,6 +15,8 @@ function findOne(token, id) {
 }
 
 /**
+ * Récupère la liste de toutes les publications
+ * 
  * @param {String} token
  *
  * @return {Promise}
@@ -23,6 +27,8 @@ function getAll(token) {
 }
 
 /**
+ * On récupère la liste 
+ * 
  * @param {String} token
  *
  * @return {Promise}
@@ -33,6 +39,8 @@ function getPopulaire(token) {
 }
 
 /**
+ * On crée la publication.
+ * 
  * @param {String} token
  * @param {String} title
  * @param {String} description
@@ -54,6 +62,8 @@ function create(token, title, description, file) {
 }
 
 /**
+ * On met à jour le publication.
+ * 
  * @param {String} token
  * @param {String} id Publication ID
  * @param {String} title
@@ -70,6 +80,7 @@ function update(token, id, title, description) {
 }
 
 /**
+ * On supprime la publication selon son id
  * @param {String} token
  * @param {String} id
  *
@@ -81,6 +92,7 @@ function deleteOne(token, id) {
 }
 
 /**
+ * Fonction jaime pour les publications.
  * @param {String} token
  * @param {String} publicationId
  * @param {String} like 3 valeurs possible => "1" = j'aime, "0" = ni aimer ni ne pas aimer ou "-1" = je n'aime pas.

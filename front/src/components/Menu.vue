@@ -55,23 +55,4 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "src/assets/scss/style.scss";
-.header {
-  background-color: $primary-color;
-
-  .logo {
-    max-height: 30px;
-    width: auto;
-  }
-  .nav-pills a.nav-link {
-    color: #fff;
-    margin: 0 0.8em;
-    &.router-link-active {
-      // border-bottom: 3px solid #fff;
-      // border-radius: 0;
-      background-color: $secondary-font-color;
-      color: #fff;
-    }
-  }
-}
 </style>

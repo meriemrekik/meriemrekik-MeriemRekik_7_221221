@@ -2,6 +2,8 @@ import axios from "axios";
 import config from "../config";
 
 /**
+ * Connexion des utilisateurs.
+ * 
  * @param {String} email
  * @param {String} password
  *
@@ -14,6 +16,8 @@ function sigIn(email, password) {
 }
 
 /**
+ * Enregistrement des utilisateurs sur le site.
+ * 
  * @param {String} email
  * @param {String} password
  * @param {String} nom
@@ -28,6 +32,8 @@ function signUp(email, password, nom, prenom) {
 }
 
 /**
+ * Récupère le user grace à son id.
+ * 
  * @param {String} token
  * @param {String} userId
  *
@@ -40,6 +46,8 @@ function getUser(token, userId) {
 }
 
 /**
+ * Supprime un user selon son id.
+ * 
  * @param {String} token
  * @param {String} userId
  *

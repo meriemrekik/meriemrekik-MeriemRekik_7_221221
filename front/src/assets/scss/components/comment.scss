@@ -27,7 +27,6 @@
         border-radius: 8px;
         color: #fff;
         max-width: 300px;
-        min-height: 80px;
         
     }
     .message-action {
@@ -68,8 +67,11 @@
   }
 
 .input-comment-container {
-    background-color: #f5f5f5;
+  background-color: rgb(245, 241, 241);
     padding: 0.6em;
+    max-width: 750px;
+    margin: 0 auto;
+
 }
 
   .comment-citation {

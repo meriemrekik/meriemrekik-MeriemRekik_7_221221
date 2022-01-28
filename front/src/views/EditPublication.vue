@@ -41,8 +41,11 @@ export default {
     };
   },
   mounted() {
+    // on recupère le token présent dans le store
     this.token = this.$store.state.token;
+    // on récupère l'id de la publication à éditer dans l'URL
     this.idPublication = this.$route.params.id || null;
+    // On récupère la publication
     this.getPublication(this.idPublication);
   },
   components: {
@@ -51,12 +54,23 @@ export default {
   methods: {
     async getPublication(id) {
       let newPublication = null;
+      // On va chercher en base la publication
       await publicationServ.findOne(this.token, id).then((p) => {
         newPublication = p;
-        this.publication = JSON.parse(JSON.stringify(p));
         return p;
       });
-      this.publication = newPublication;
+      // Si l'utilisateur est un admin
+      // Ou si son id est celui de l'auteur de la publication
+      if (
+        this.$store.state.profile.isAdmin ||
+        this.$store.state.profile.id == newPublication.userId
+      ) {
+        // Alors on met la publication dans la variable qui servira de props à notre futur composant
+        this.publication = newPublication;
+      } else {
+        // Sinon on renvoit l'utilisateur à la page d'accueil
+        this.$router.push("/");
+      }
     },
   },
 };

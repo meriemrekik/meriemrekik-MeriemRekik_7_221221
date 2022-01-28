@@ -1,42 +1,31 @@
 <template>
   <Menu :liens="liensMenu" />
   <div class="container-md !direction !spacing home">
-    <div
-      class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}"
-    >
-      <div
-        class="
-          row
-          ${1|
-          ,row-cols-2,row-cols-3,
-          auto,justify-content-md-center,|}
-        "
-      >
-        <div class="col-12 col-lg-9 pb-5">
-          <h4 class="mb-5">
-            <i class="bi bi-globe"></i> Publications les plus récentes
-          </h4>
-          <div v-if="!allPublications.length">
-            Aucune Publications publiées pour le moment
-          </div>
-          <Publication
-            v-for="(art, index) in allPublications"
-            :key="index"
-            :publication="art"
-            @publicationDeleted="removePublication"
-          />
+    <div class="row">
+      <div class="col-12 col-lg-9 pb-5">
+        <h4 class="mb-5">
+          <i class="bi bi-globe"></i> Publications les plus récentes
+        </h4>
+        <div v-if="!allPublications.length">
+          Aucune Publications publiées pour le moment
         </div>
-        <div class="col-12 col-lg-3">
-          <h4 class="mb-5">
-            <i class="bi bi-star-fill"></i> Publications populaires
-          </h4>
-          <div>
-            <div v-if="!allPublications.length">
-              Aucune Publications populaire pour le moment
-            </div>
-            <div v-for="(pop, index) in allPublicationsPopulaires" :key="index">
-              <PopularPublication :publication="pop" />
-            </div>
+        <Publication
+          v-for="(art, index) in allPublications"
+          :key="index"
+          :publication="art"
+          @publicationDeleted="removePublication"
+        />
+      </div>
+      <div class="col-12 col-lg-3">
+        <h4 class="mb-5">
+          <i class="bi bi-star-fill"></i> Publications populaires
+        </h4>
+        <div>
+          <div v-if="!allPublications.length">
+            Aucune Publications populaire pour le moment
+          </div>
+          <div v-for="(pop, index) in allPublicationsPopulaires" :key="index">
+            <PopularPublication :publication="pop" />
           </div>
         </div>
       </div>

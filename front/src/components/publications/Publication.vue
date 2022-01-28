@@ -31,7 +31,7 @@
 
        <router-link v-if="displayNbComments" :to="'/publication/'+publication.id">
         <span v-if="publication.comments">{{publication.comments}} commentaires <i class="bi bi-chat-text"></i></span>
-        <span v-else>Soyez le premier à poster un commentaire <i class="bi bi-chat-text"></i></span>
+        <span v-else>Poster un commentaire <i class="bi bi-chat-text"></i></span>
       </router-link>
       </div>
 
