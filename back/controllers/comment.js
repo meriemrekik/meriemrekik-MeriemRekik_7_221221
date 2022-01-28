@@ -46,7 +46,7 @@ exports.getAllCommentPublication = (req, res, next) => {
     const publicationId = req.params.id;
     // on récupère toute les commentaires disponible pour cette publication
     // On les récupère par ordre décroissant de publication => les plus récentes en premier
-    Comment.findAll({ where: { publicationId }, raw: true, order: [['createdAt', 'DESC']] }).then(
+    Comment.findAll({ where: { publicationId }, raw: true, order: [['createdAt', 'ASC']] }).then(
         async (comments) => {
             for (const comment of comments) {
                 await getUserById(comment.userId).then((u) => {
