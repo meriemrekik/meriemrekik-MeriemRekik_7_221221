@@ -13,6 +13,7 @@
                   >Adresse Email</label
                 >
                 <div class="col-md-6">
+                  <!-- champs EMAIL -->
                   <input
                     type="email"
                     v-model="email"
@@ -32,6 +33,7 @@
                   >Mot de Passe</label
                 >
                 <div class="col-md-6">
+                  <!-- CHAMPS PASSWORD -->
                   <input
                     type="password"
                     v-model="password"

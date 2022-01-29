@@ -9,6 +9,8 @@
         <div v-if="!allPublications.length">
           Aucune Publications publiées pour le moment
         </div>
+        <!-- PUBLICATIONS  -->
+        <!-- On parcour toute les publication pour afficher chaque article -->
         <Publication
           v-for="(art, index) in allPublications"
           :key="index"
@@ -24,6 +26,7 @@
           <div v-if="!allPublications.length">
             Aucune Publications populaire pour le moment
           </div>
+          <!-- PUBLICATION POPULAIRES -->
           <div v-for="(pop, index) in allPublicationsPopulaires" :key="index">
             <PopularPublication :publication="pop" />
           </div>
@@ -57,9 +60,9 @@ export default {
     };
   },
   mounted() {
-    this.token = this.$store.state.token;
-    this.publications = this.$store.state.publications;
-    this.publicationsPopulaire = this.$store.state.publicationsPopulaire;
+    // this.token = this.$store.state.token;
+    // this.publications = this.$store.state.publications;
+    // this.publicationsPopulaire = this.$store.state.publicationsPopulaire;
     this.$store.dispatch("getPublications");
     this.$store.dispatch("getPublicationsPopulaires");
   },
