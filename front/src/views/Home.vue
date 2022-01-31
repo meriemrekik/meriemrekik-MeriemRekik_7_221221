@@ -44,6 +44,7 @@ import Publication from "@/components/publications/Publication.vue";
 import PopularPublication from "@/components/publications/PopularPublication.vue";
 // import publicationService from "../services/publication";
 
+//declarer composant de  la page home
 export default {
   name: "Home",
   data() {

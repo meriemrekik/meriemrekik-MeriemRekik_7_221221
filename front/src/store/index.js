@@ -31,6 +31,7 @@ export default createStore({
     setCurrentPublication(state, publication) {
       state.currentPublication = publication;
     },
+    //on met a jour une publication dans notre tableau de publication dans notre state
     updatePublication(state, publication) {
       let index = state.publications.findIndex(p => p.id == publication.id);
       if (index >= 0) {
@@ -41,6 +42,7 @@ export default createStore({
       // comme la liste des publications normales et populaires 
       // peuvent contenir des publications identique alors quand on mes à jour une publication dans une
       // on verifie si elle apparait pas dans l'autre et on la modifie
+      //on met a jour une publication populaire dans notre tableau dans notre state
       index = state.publicationsPopulaire.findIndex(p => p.id == publication.id);
       if (index >= 0) {
         state.publicationsPopulaire[index] = { ...state.publicationsPopulaire[index], ...publication };
