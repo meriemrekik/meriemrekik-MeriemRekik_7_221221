@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 
-//gestion des principaux chemins de l'API sauces,auth,images
+//gestion des principaux chemins de l'API publication,auth,images
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
